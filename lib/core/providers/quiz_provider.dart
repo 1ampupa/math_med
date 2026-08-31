@@ -1,28 +1,31 @@
-import 'dart:math';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:math_med/core/enums/operator.dart';
 import 'package:math_med/core/quiz/quiz.dart';
+import 'package:math_med/numbers/number_randomiser.dart';
 
 class QuizNotifier extends Notifier<Quiz> {
-  final Random _randomiser = Random();
 
   @override
   Quiz build() {
-    return _generateQuiz();
+    return _generateQuiz(1, 5, Operator.addition);
   }
 
   void nextQuiz() {
-    state = _generateQuiz();
+    state = _generateQuiz(1, 5, Operator.division);
   }
 
   // Generator
-  Quiz _generateQuiz() {
+  Quiz _generateQuiz(int rangeMin, int rangeMax, Operator operator) {
+    (int, int) randomOperands = NumberRandomiser(
+      rangeMin: rangeMin,
+      rangeMax: rangeMax,
+      operator: operator
+    ).operands;
     return Quiz(
-      operandA: _randomiser.nextInt(10) + 1, // [1, 10]
-      operandB: _randomiser.nextInt(10) + 1,
-      operator: Operator.division,
+      operandA: randomOperands.$1, // [1, 5]
+      operandB: randomOperands.$2,
+      operator: operator,
     );
   }
 }
