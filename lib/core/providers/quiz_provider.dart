@@ -20,9 +20,9 @@ class QuizNotifier extends Notifier<Quiz> {
   // Generator
   Quiz _generateQuiz() {
     return Quiz(
-      operandA: _randomiser.nextInt(5) + 1, // [1, 5]
-      operandB: _randomiser.nextInt(5) + 1,
-      operator: Operator.addition,
+      operandA: _randomiser.nextInt(10) + 1, // [1, 10]
+      operandB: _randomiser.nextInt(10) + 1,
+      operator: Operator.division,
     );
   }
 }

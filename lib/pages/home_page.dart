@@ -19,7 +19,9 @@ class HomePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text("Quiz"),
-              Text("${quiz.operandA} ${quiz.operator.symbol} ${quiz.operandB} = ?"),
+              Text(quiz.equation),
+              Divider(),
+              Text(quiz.choices.join("   ")),
               Divider(),
               ElevatedButton(
                 onPressed: () {
