@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:math_med/core/enums/operator.dart';
 import 'package:math_med/core/quiz/quiz.dart';
-import 'package:math_med/numbers/number_randomiser.dart';
+import 'package:math_med/core/numbers/number_randomiser.dart';
 
 class QuizNotifier extends Notifier<Quiz> {
 
