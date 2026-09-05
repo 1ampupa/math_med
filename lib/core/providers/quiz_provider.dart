@@ -12,7 +12,7 @@ class QuizNotifier extends Notifier<Quiz> {
   }
 
   void nextQuiz() {
-    state = _generateQuiz(1, 5, Operator.division);
+    state = _generateQuiz(1, 5, Operator.addition);
   }
 
   // Generator

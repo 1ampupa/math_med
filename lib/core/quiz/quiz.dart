@@ -9,14 +9,16 @@ class Quiz {
 
   static const int maxChoiceAmount = 3; // Temporary hardcoded
 
-  static final Random _randomiser = Random();
-
   Quiz({
     required this.operandA,
     required this.operandB,
-    required this.operator
-  })
-    : choices = generateChoices(calculateAnswer(operandA, operandB, operator), operator);
+    required this.operator,
+    Random? random,
+  }) : choices = generateChoices(
+         calculateAnswer(operandA, operandB, operator),
+         operator,
+         random ?? Random(),
+       );
 
   // Answer generator
 
@@ -26,7 +28,7 @@ class Quiz {
       Operator.addition => operandA + operandB,
       Operator.subtraction => operandA - operandB,
       Operator.multiplication => operandA * operandB,
-      Operator.division => operandA ~/ operandB
+      Operator.division => operandA ~/ operandB,
     };
   }
 
@@ -34,8 +36,12 @@ class Quiz {
 
   // Choice generator
 
-  static int _generateAdditiveDistractor(int answer, int range) {
-    int fakeAnswer = answer + _randomiser.nextInt(range * 2) - range; // [answer - range, answer + range - 1]
+  static int _generateAdditiveDistractor(int answer, Random random) {
+    int range = max(2, (answer / 3).round());
+    int fakeAnswer =
+        answer +
+        random.nextInt(range * 2) -
+        range; // [answer - range, answer + range - 1]
 
     // Avoid negative number and same
     if (fakeAnswer < 0) fakeAnswer = fakeAnswer.abs();
@@ -43,32 +49,57 @@ class Quiz {
     return fakeAnswer; // Return as-is
   }
 
-  static List<int> generateChoices(int answer, Operator operator) {
+  static int _generateMultiplicativeDistractor(
+    int answer,
+    (double, double) deviationRange,
+    Random random,
+  ) {
+    double deviation =
+        deviationRange.$1 +
+        (random.nextDouble() * (deviationRange.$2 - deviationRange.$1));
+    int offset = max(1, (answer * deviation).round());
+
+    if (random.nextBool()) {
+      return answer + offset;
+    } else {
+      int fakeAnswer = answer - offset;
+
+      return fakeAnswer > 0 ? fakeAnswer : answer + offset;
+    }
+  }
+
+  static List<int> generateChoices(
+    int answer,
+    Operator operator,
+    Random? random,
+  ) {
+    final rand = random ?? Random();
+
     Set<int> choices = {answer};
+    int attempt = 0;
 
     while (choices.length < maxChoiceAmount) {
-      int range = max(2, (answer / 2).round()); // Set the choice bound from half of the answer or 2 if too low.
-      int fakeAnswer;
-      switch (operator) {
-        case Operator.addition:
-          // Fall through Subtraction
-        case Operator.subtraction:
-          fakeAnswer = _generateAdditiveDistractor(answer, range);
-          break;
-        case Operator.multiplication: // TODO Multiplicative and Divisive Distractors
-          // Fall through Division
-        case Operator.division:
-          // Protect against nextInt(0) or small answers
-          int maxBound = max(2, answer);
-          fakeAnswer = _randomiser.nextInt((maxBound * 1.5).round()) + 1;
-          break;
+      attempt++;
+
+      // Fallback
+      if (attempt > 100) {
+        int fallback = answer + choices.length;
+        choices.add(fallback);
+        continue;
       }
+
+      int fakeAnswer = switch (operator) {
+        Operator.addition ||
+        Operator.subtraction => _generateAdditiveDistractor(answer, rand),
+        Operator.multiplication || Operator.division =>
+          _generateMultiplicativeDistractor(answer, (0.1, 0.5), rand),
+      };
 
       // Add the choice
       choices.add(fakeAnswer);
     }
 
-    return choices.toList()..shuffle();
+    return choices.toList()..sort();
   }
 
   // Readable equation
