@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:math_med/core/providers/quiz_provider.dart';
+import 'package:math_med/gui/widgets/answer_choices.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -21,17 +22,7 @@ class HomePage extends ConsumerWidget {
               Text("Quiz"),
               Text(quiz.equation),
               Divider(),
-              Column(
-                children: quiz.choices.map((choice) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      print(quiz.submit(choice));
-                      ref.read(quizProvider.notifier).nextQuiz();
-                    },
-                    child: Text("$choice")
-                  );
-                }).toList(),
-              ),
+              AnswerChoice(),
               Divider(),
               ElevatedButton(
                 onPressed: () {

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:math_med/core/enums/operator.dart';
-import 'package:math_med/core/quiz/quiz.dart';
+import 'package:math_med/core/quizzes/quiz.dart';
 
 void main() {
   group("Quiz Class Test", () {
