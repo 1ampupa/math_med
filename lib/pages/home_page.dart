@@ -21,7 +21,17 @@ class HomePage extends ConsumerWidget {
               Text("Quiz"),
               Text(quiz.equation),
               Divider(),
-              Text(quiz.choices.join("   ")),
+              Column(
+                children: quiz.choices.map((choice) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      print(quiz.submit(choice));
+                      ref.read(quizProvider.notifier).nextQuiz();
+                    },
+                    child: Text("$choice")
+                  );
+                }).toList(),
+              ),
               Divider(),
               ElevatedButton(
                 onPressed: () {

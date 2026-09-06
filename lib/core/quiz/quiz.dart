@@ -102,6 +102,11 @@ class Quiz {
     return choices.toList()..sort();
   }
 
+  // User answer
+  bool submit(int choice) {
+    return choice == answer;
+  }
+
   // Readable equation
   String get equation => "$operandA ${operator.symbol} $operandB = ?";
 }
