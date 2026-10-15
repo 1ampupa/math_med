@@ -19,17 +19,16 @@ class HomePage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Quiz"),
-              Text(quiz.equation),
+              Text(
+                "Which one is correct?",
+                textScaler: TextScaler.linear(1.5),
+              ),
+              Text(
+                quiz.equation,
+                textScaler: TextScaler.linear(3),
+              ),
               Divider(),
               AnswerChoice(),
-              Divider(),
-              ElevatedButton(
-                onPressed: () {
-                  ref.read(quizProvider.notifier).nextQuiz();
-                },
-                child: const Text("Next Quiz"),
-              ),
             ],
           ),
         ),

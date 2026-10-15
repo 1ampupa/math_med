@@ -13,7 +13,7 @@ class Quiz {
     required this.operandA,
     required this.operandB,
     required this.operator,
-    Random? random,
+    Random? random, // this can be set as seed
   }) : choices = generateChoices(
          calculateAnswer(operandA, operandB, operator),
          operator,
@@ -57,13 +57,13 @@ class Quiz {
     double deviation =
         deviationRange.$1 +
         (random.nextDouble() * (deviationRange.$2 - deviationRange.$1));
-    int offset = max(1, (answer * deviation).round());
+
+    int offset = max(1, (answer.abs() * deviation).round());
 
     if (random.nextBool()) {
       return answer + offset;
     } else {
       int fakeAnswer = answer - offset;
-
       return fakeAnswer > 0 ? fakeAnswer : answer + offset;
     }
   }
@@ -108,5 +108,5 @@ class Quiz {
   }
 
   // Readable equation
-  String get equation => "$operandA ${operator.symbol} $operandB = ?";
+  String get equation => "$operandA ${operator.symbol} $operandB";
 }

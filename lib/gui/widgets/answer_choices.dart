@@ -12,20 +12,29 @@ class AnswerChoice extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Quiz quiz = ref.watch(quizProvider);
 
-    return Column(
+    return Row(
+      mainAxisAlignment: .center,
+      spacing: 15,
       children: [
         for (int i = 0; i < quiz.choices.length; i++)
-          ElevatedButton(
-          onPressed: () {
-            log(
-              "${quiz.equation} submitted ${quiz.choices[i]}. correct: ${quiz.submit(quiz.choices[i])}",
-              level: 0,
-              name: "Quiz",
-            );
-            ref.read(quizProvider.notifier).nextQuiz();
-          },
-          child: Text("${String.fromCharCode(i + 65)}. ${quiz.choices[i]}"),
-        )
+          SizedBox(
+            width: 100,
+            height: 150,
+            child: ElevatedButton(
+              onPressed: () {
+                log(
+                  "${quiz.equation} submitted ${quiz.choices[i]}. correct: ${quiz.submit(quiz.choices[i])}",
+                  level: 0,
+                  name: "Quiz",
+                );
+                ref.read(quizProvider.notifier).nextQuiz();
+              },
+              child: Text(
+                "${quiz.choices[i]}",
+                textScaler: TextScaler.linear(3),
+              ),
+            ),
+          )
       ]
     );
   }

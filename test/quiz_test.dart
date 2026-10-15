@@ -22,7 +22,6 @@ void main() {
       expect(choices.length, equals(Quiz.maxChoiceAmount));
     });
 
-
     test("generateChoices must have the real answer.", () {
       int answer = 20;
       final List<int> choices = Quiz.generateChoices(answer, Operator.addition, null);
