@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:math_med/core/providers/quiz_provider.dart';
+import 'package:math_med/core/providers/session_provider.dart';
+import 'package:math_med/core/sessions/session.dart';
+import 'package:math_med/gui/pages/result_page.dart';
 import 'package:math_med/gui/widgets/answer_choices.dart';
 
-class HomePage extends ConsumerWidget {
-  const HomePage({super.key});
+class GamePage extends ConsumerWidget {
+  const GamePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final quiz = ref.watch(quizProvider);
+    final Session session = ref.watch(sessionProvider);
+    
+    if (session.currentQuiz == null && !session.isComplete) {
+      return Scaffold(
+        body: Center(
+          child: Text("It seems like there's an unexpected problem with your game.\nPlease restart."),
+        ),
+      );
+    }
+
+    if (session.isComplete) {
+      return ResultPage();
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -20,11 +34,14 @@ class HomePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
+                "Quiz #${session.quizCreated}"
+              ),
+              Text(
                 "Which one is correct?",
                 textScaler: TextScaler.linear(1.5),
               ),
               Text(
-                quiz.equation,
+                session.currentQuiz!.equation,
                 textScaler: TextScaler.linear(3),
               ),
               Divider(),

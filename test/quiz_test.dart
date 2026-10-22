@@ -58,13 +58,6 @@ void main() {
       expect(choices.length, equals(uniqueChoices.length));
     });
 
-    test("Choices should be sorted in ascending order", () {
-      final choices = Quiz.generateChoices(15, Operator.division, Random(42));
-      final sortedChoices = List<int>.from(choices)..sort();
-
-      expect(choices, equals(sortedChoices));
-    });
-
     test("generateChoices handles boundary answers (1 and 0) without infinite loop", () {
       final choicesForOne = Quiz.generateChoices(1, Operator.multiplication, Random(42));
       final choicesForZero = Quiz.generateChoices(0, Operator.addition, Random(42));

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'package:math_med/gui/pages/home_page.dart';
+import 'package:math_med/gui/pages/game_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,10 +35,10 @@ class MathMedApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF1E1E1E), // sleek dark IDE grey
+        scaffoldBackgroundColor: const Color(0xFF1E1E1E),
         colorScheme: const ColorScheme.dark(primary: Colors.deepPurpleAccent),
       ),
-      home: const HomePage(),
+      home: const GamePage(),
     );
   }
 }

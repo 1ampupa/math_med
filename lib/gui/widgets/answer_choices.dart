@@ -2,35 +2,35 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:math_med/core/providers/quiz_provider.dart';
-import 'package:math_med/core/quizzes/quiz.dart';
+import 'package:math_med/core/sessions/session.dart';
+import 'package:math_med/core/providers/session_provider.dart';
 
 class AnswerChoice extends ConsumerWidget {
   const AnswerChoice({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Quiz quiz = ref.watch(quizProvider);
+    final Session session = ref.watch(sessionProvider);
 
     return Row(
       mainAxisAlignment: .center,
       spacing: 15,
       children: [
-        for (int i = 0; i < quiz.choices.length; i++)
+        for (int i = 0; i < session.currentQuiz!.choices.length; i++)
           SizedBox(
             width: 100,
             height: 150,
             child: ElevatedButton(
               onPressed: () {
                 log(
-                  "${quiz.equation} submitted ${quiz.choices[i]}. correct: ${quiz.submit(quiz.choices[i])}",
+                  "${session.quizCreated}. ${session.currentQuiz!.equation} submitted ${session.currentQuiz!.choices[i]}. correct: ${session.currentQuiz!.submit(session.currentQuiz!.choices[i])}",
                   level: 0,
                   name: "Quiz",
                 );
-                ref.read(quizProvider.notifier).nextQuiz();
+                ref.read(sessionProvider.notifier).nextQuiz(false, session.currentQuiz!.submit(session.currentQuiz!.choices[i]));
               },
               child: Text(
-                "${quiz.choices[i]}",
+                "${session.currentQuiz!.choices[i]}",
                 textScaler: TextScaler.linear(3),
               ),
             ),

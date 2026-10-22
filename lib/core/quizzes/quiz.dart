@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:math_med/core/enums/operator.dart';
+import 'package:math_med/core/numbers/number_randomiser.dart';
 
 class Quiz {
   final int operandA, operandB;
@@ -19,6 +20,20 @@ class Quiz {
          operator,
          random ?? Random(),
        );
+
+  static Quiz generateQuiz(Operator operator) {
+    final operands = NumberRandomiser(
+      rangeMin: 1,
+      rangeMax: 5,
+      operator: operator,
+    ).operands;
+
+    return Quiz(
+      operandA: operands.$1,
+      operandB: operands.$2,
+      operator: operator,
+    );
+  }
 
   // Answer generator
 
@@ -99,7 +114,7 @@ class Quiz {
       choices.add(fakeAnswer);
     }
 
-    return choices.toList()..sort();
+    return choices.toList()..shuffle();
   }
 
   // User answer
