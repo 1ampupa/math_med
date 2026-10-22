@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:math_med/core/providers/session_provider.dart';
 
+import 'package:math_med/core/providers/session_provider.dart';
 import 'package:math_med/core/sessions/session.dart';
 
 class ResultPage extends ConsumerWidget {
@@ -19,7 +19,13 @@ class ResultPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("GAME RESULT", textScaler: TextScaler.linear(5)),
+              Text(
+                "GAME RESULT",
+                style: TextStyle(
+                  fontFamily: "Anton",
+                  fontSize: 50,
+                ),
+              ),
               Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,

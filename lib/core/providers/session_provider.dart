@@ -9,13 +9,11 @@ import 'package:math_med/core/sessions/session.dart';
 class SessionNotifier extends Notifier<Session> {
   @override
   Session build() {
-    const operator = Operator.addition;
-
-    final quiz = Quiz.generateQuiz(operator);
+    const operator = Operator.multiplication;
 
     return Session(
-      operator: Operator.addition,
-      currentQuiz: quiz,
+      operator: operator,
+      currentQuiz: Quiz.generateQuiz(operator),
       quizCreated: 1,
     );
   }
@@ -41,19 +39,11 @@ class SessionNotifier extends Notifier<Session> {
       currentQuiz: Quiz.generateQuiz(state.operator),
       isComplete: false,
     );
-  }
-
-  bool isSessionComplete() {
-    if (state.quizCreated >= state.maxQuiz) {
-      state = state.copyWith(isComplete: true, currentQuiz: null);
-      log(
-        "Session completed",
-        level: 0,
-        name: "SessionProvider",
-      );
-      return true;
-    }
-    return false;
+    log(
+      "Session restarted",
+      level: 0,
+      name: "SessionProvider"
+    );
   }
 
   void nextQuiz(bool skip, bool correct) {
@@ -76,6 +66,19 @@ class SessionNotifier extends Notifier<Session> {
       quizCreated: state.quizCreated + 1,
       currentQuiz: Quiz.generateQuiz(state.operator),
     );
+  }
+
+  bool isSessionComplete() {
+    if (state.quizCreated >= state.maxQuiz) {
+      state = state.copyWith(isComplete: true, currentQuiz: null);
+      log(
+        "Session completed",
+        level: 0,
+        name: "SessionProvider",
+      );
+      return true;
+    }
+    return false;
   }
 }
 

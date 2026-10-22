@@ -19,3 +19,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: IBM Plex Sans Thai
+      fonts:
+        - asset: assets/fonts/IBMPlexSansThai-Regular.ttf
+    - family: Anton
+      fonts:
+        - asset: assets/fonts/Anton-Regular.ttf

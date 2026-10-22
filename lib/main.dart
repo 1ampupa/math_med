@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:window_manager/window_manager.dart';
 
 import 'package:math_med/gui/pages/game_page.dart';
@@ -32,12 +33,35 @@ class MathMedApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: "MathMed",
+
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData(
+        useMaterial3: true,
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF1E1E1E),
-        colorScheme: const ColorScheme.dark(primary: Colors.deepPurpleAccent),
+        scaffoldBackgroundColor: const Color(0xFF1E1E1E), 
+        fontFamily: 'IBM Plex Sans Thai',
+
+        colorScheme: const ColorScheme.dark(
+          surface: Color(0xFF151515),
+          primary: Color(0xFF7555FF),
+          primaryContainer: Color(0xFF7555FF),
+          onPrimary: Color(0xFFDBE7FF),
+          secondary: Color(0xFFDBE7FF),
+          secondaryContainer: Color(0xFFDBE7FF),
+          onSecondary: Color(0xFF151515),
+          tertiary: Color(0xFF202020),
+          tertiaryContainer: Color(0xFF202020),
+          onTertiary: Color(0xFFDBE7FF),
+          onTertiaryContainer: Color(0xFFDBE7FF),
+        ),
+
+        tooltipTheme: const TooltipThemeData(
+          preferBelow: false,
+          waitDuration: Duration(milliseconds: 500),
+        )
       ),
+
       home: const GamePage(),
     );
   }

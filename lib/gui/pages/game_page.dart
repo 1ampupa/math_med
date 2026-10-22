@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:math_med/core/providers/session_provider.dart';
 import 'package:math_med/core/sessions/session.dart';
+
+import 'package:math_med/gui/pages/error_page.dart';
 import 'package:math_med/gui/pages/result_page.dart';
 import 'package:math_med/gui/widgets/answer_choices.dart';
 
@@ -14,11 +16,7 @@ class GamePage extends ConsumerWidget {
     final Session session = ref.watch(sessionProvider);
     
     if (session.currentQuiz == null && !session.isComplete) {
-      return Scaffold(
-        body: Center(
-          child: Text("It seems like there's an unexpected problem with your game.\nPlease restart."),
-        ),
-      );
+      return ErrorPage(errorText: "There's no quiz available.");
     }
 
     if (session.isComplete) {
