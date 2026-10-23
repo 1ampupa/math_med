@@ -9,7 +9,7 @@ import 'package:math_med/core/sessions/session.dart';
 class SessionNotifier extends Notifier<Session> {
   @override
   Session build() {
-    const operator = Operator.multiplication;
+    const operator = Operator.division;
 
     return Session(
       operator: operator,

@@ -13,14 +13,14 @@ class AnswerChoice extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Session session = ref.watch(sessionProvider);
 
-    return Row(
+    return Column(
       mainAxisAlignment: .center,
       spacing: 15,
       children: [
         for (int i = 0; i < session.currentQuiz!.choices.length; i++)
           SizedBox(
-            width: 100,
-            height: 150,
+            width: 300,
+            height: 100,
             child: ElevatedButton(
               onPressed: () {
                 log(

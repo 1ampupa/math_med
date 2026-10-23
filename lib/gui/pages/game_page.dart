@@ -20,7 +20,7 @@ class GamePage extends ConsumerWidget {
     }
 
     if (session.isComplete) {
-      return ResultPage();
+      return ResultPage(session: session);
     }
 
     return Scaffold(
@@ -32,15 +32,15 @@ class GamePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Quiz #${session.quizCreated}"
-              ),
-              Text(
-                "Which one is correct?",
-                textScaler: TextScaler.linear(1.5),
+                "#${session.quizCreated}",
+                textScaler: TextScaler.linear(2),
+                style: TextStyle(
+                  fontFamily: "Anton"
+                ),
               ),
               Text(
                 session.currentQuiz!.equation,
-                textScaler: TextScaler.linear(3),
+                textScaler: TextScaler.linear(4),
               ),
               Divider(),
               AnswerChoice(),
