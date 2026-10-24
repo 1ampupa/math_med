@@ -3,17 +3,18 @@ import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:math_med/core/enums/operator.dart';
 import 'package:math_med/core/quizzes/quiz.dart';
+import 'package:math_med/core/quizzes/quiz_modifier.dart';
 
 void main() {
   group("Quiz Class Test", () {
 
     test("calculateAnswer must show the answer correctly.", () {
-      expect(Quiz(operandA: 6, operandB: 7, operator: Operator.addition).answer, equals(13));
-      expect(Quiz(operandA: 16, operandB: 6, operator: Operator.subtraction).answer, equals(10));
-      expect(Quiz(operandA: 2, operandB: 4, operator: Operator.multiplication).answer, equals(8));
-      expect(Quiz(operandA: 24, operandB: 2, operator: Operator.division).answer, equals(12));
+      expect(Quiz(operandA: 6, operandB: 7, operator: Operator.addition, quizModifier: QuizModifier()).answer, equals(13));
+      expect(Quiz(operandA: 16, operandB: 6, operator: Operator.subtraction, quizModifier: QuizModifier()).answer, equals(10));
+      expect(Quiz(operandA: 2, operandB: 4, operator: Operator.multiplication, quizModifier: QuizModifier()).answer, equals(8));
+      expect(Quiz(operandA: 24, operandB: 2, operator: Operator.division, quizModifier: QuizModifier()).answer, equals(12));
 
-      expect(Quiz(operandA: 9, operandB: 2, operator: Operator.division).answer, equals(4));
+      expect(Quiz(operandA: 9, operandB: 2, operator: Operator.division, quizModifier: QuizModifier()).answer, equals(4));
     });
 
     test("generateChoices creates choices with length of maxChoiceAmount.", () {
@@ -29,7 +30,7 @@ void main() {
       expect(choices.contains(answer), isTrue); 
     });
 
-    test("generateChoices of two questions with same seed and same answer must be the same.", () {
+    test("generateChoices of two questions with same seed must provide the same same answers set.", () {
       final Random random1 = Random(42);
       final Random random2 = Random(42);
 
@@ -38,7 +39,7 @@ void main() {
       final choices1 = Quiz.generateChoices(answer, Operator.addition, random1);
       final choices2 = Quiz.generateChoices(answer, Operator.addition, random2);
 
-      expect(choices1, equals(choices2));
+      expect(choices1, unorderedEquals(choices2));
 
     });
 

@@ -1,10 +1,12 @@
 import 'package:math_med/core/enums/operator.dart';
 import 'package:math_med/core/quizzes/quiz.dart';
+import 'package:math_med/core/quizzes/quiz_modifier.dart';
 
 class Session {
   static const _unset = Object();
 
   final Operator operator;
+  final QuizModifier quizModifier;
   final int maxQuiz;
   final int maxChoices;
 
@@ -19,6 +21,7 @@ class Session {
 
   const Session({
     required this.operator,
+    required this.quizModifier,
     this.maxQuiz = 10,
     this.maxChoices = 3,
     this.quizCreated = 0,
@@ -32,6 +35,7 @@ class Session {
 
   Session copyWith({
     Operator? operator,
+    QuizModifier? quizModifer,
     int? quizCreated,
     int? quizAnswered,
     int? quizSkipped,
@@ -42,6 +46,7 @@ class Session {
   }) {
     return Session(
       operator: operator ?? this.operator,
+      quizModifier: quizModifer ?? quizModifier,
       quizCreated: quizCreated ?? this.quizCreated,
       quizAnswered: quizAnswered ?? this.quizAnswered,
       quizSkipped: quizSkipped ?? this.quizSkipped,

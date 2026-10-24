@@ -4,16 +4,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:math_med/core/enums/operator.dart';
 import 'package:math_med/core/quizzes/quiz.dart';
+import 'package:math_med/core/quizzes/quiz_modifier.dart';
 import 'package:math_med/core/sessions/session.dart';
 
 class SessionNotifier extends Notifier<Session> {
   @override
   Session build() {
-    const operator = Operator.division;
+    final operator = Operator.addition; // hardcoded
+    final QuizModifier quizModifier = QuizModifier(); // hardcoded
 
     return Session(
       operator: operator,
-      currentQuiz: Quiz.generateQuiz(operator),
+      quizModifier: quizModifier,
+      currentQuiz: Quiz.generateQuiz(operator, quizModifier),
       quizCreated: 1,
     );
   }
@@ -21,10 +24,11 @@ class SessionNotifier extends Notifier<Session> {
   void start() {
     state = Session(
       operator: state.operator,
+      quizModifier: state.quizModifier,
       maxQuiz: state.maxQuiz,
       maxChoices: state.maxChoices,
       quizCreated: 1,
-      currentQuiz: Quiz.generateQuiz(state.operator),
+      currentQuiz: Quiz.generateQuiz(state.operator, state.quizModifier),
     );
   }
 
@@ -36,7 +40,7 @@ class SessionNotifier extends Notifier<Session> {
       quizSkipped: 0,
       correctAnswer: 0,
       incorrectAnswer: 0,
-      currentQuiz: Quiz.generateQuiz(state.operator),
+      currentQuiz: Quiz.generateQuiz(state.operator, state.quizModifier),
       isComplete: false,
     );
     log(
@@ -64,7 +68,7 @@ class SessionNotifier extends Notifier<Session> {
 
     state = state.copyWith(
       quizCreated: state.quizCreated + 1,
-      currentQuiz: Quiz.generateQuiz(state.operator),
+      currentQuiz: Quiz.generateQuiz(state.operator, state.quizModifier),
     );
   }
 

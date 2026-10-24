@@ -16,7 +16,7 @@ class GamePage extends ConsumerWidget {
     final Session session = ref.watch(sessionProvider);
     
     if (session.currentQuiz == null && !session.isComplete) {
-      return ErrorPage(errorText: "There's no quiz available.");
+      return ErrorPage(errorText: "There's no quiz available.\nThis might happen if your quiz modifiers settings are too strict!");
     }
 
     if (session.isComplete) {

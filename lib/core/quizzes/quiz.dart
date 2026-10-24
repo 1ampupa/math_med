@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:math_med/core/enums/operator.dart';
 import 'package:math_med/core/numbers/number_randomiser.dart';
+import 'package:math_med/core/quizzes/quiz_modifier.dart';
 
 class Quiz {
   final int operandA, operandB;
   final Operator operator;
   final List<int> choices;
+  final QuizModifier quizModifier;
 
   static const int maxChoiceAmount = 3; // Temporary hardcoded
 
@@ -14,6 +16,7 @@ class Quiz {
     required this.operandA,
     required this.operandB,
     required this.operator,
+    required this.quizModifier,
     Random? random, // this can be set as seed
   }) : choices = generateChoices(
          calculateAnswer(operandA, operandB, operator),
@@ -21,17 +24,25 @@ class Quiz {
          random ?? Random(),
        );
 
-  static Quiz generateQuiz(Operator operator) {
-    final operands = NumberRandomiser(
-      rangeMin: 1,
-      rangeMax: 5,
+  static Quiz? generateQuiz(Operator operator, QuizModifier quizModifier) {
+    final (int, int) operands;
+
+    try {
+      operands = NumberRandomiser(
+      rangeMin: 1, // hardcoded
+      rangeMax: 5, // hardcoded
       operator: operator,
-    ).operands;
+      quizModifier: quizModifier
+      ).operands;
+    } on StateError {
+      return null;
+    }
 
     return Quiz(
       operandA: operands.$1,
       operandB: operands.$2,
       operator: operator,
+      quizModifier: quizModifier
     );
   }
 
