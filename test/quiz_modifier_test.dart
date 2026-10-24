@@ -16,6 +16,7 @@ void main() {
         rangeMax: 5,
         operator: operator,
         quizModifier: quizModifier,
+        operandsHistory: [],
       );
       for (int i = 0; i < sampleSize; i++) {
         (int, int) operands = nr.randomOperands();
@@ -35,6 +36,7 @@ void main() {
         rangeMax: 5,
         operator: operator,
         quizModifier: quizModifier,
+        operandsHistory: [],
       );
       for (int i = 0; i < sampleSize; i++) {
         (int, int) operands = nr.randomOperands();
@@ -49,6 +51,7 @@ void main() {
         rangeMax: 5,
         operator: operator,
         quizModifier: quizModifier,
+        operandsHistory: [],
       );
       for (int i = 0; i < sampleSize; i++) {
         (int, int) operands = nr.randomOperands();
@@ -64,6 +67,7 @@ void main() {
         rangeMax: 5,
         operator: operator,
         quizModifier: quizModifier,
+        operandsHistory: [],
       );
       for (int i = 0; i < sampleSize; i++) {
         (int, int) operands = nr.randomOperands();
@@ -83,6 +87,7 @@ void main() {
           rangeMax: 5,
           operator: operator,
           quizModifier: quizModifier,
+          operandsHistory: [],
         );
         for (int i = 0; i < sampleSize; i++) {
           (int, int) operands = nr.randomOperands();
@@ -98,6 +103,7 @@ void main() {
           rangeMax: 5,
           operator: operator,
           quizModifier: quizModifier,
+          operandsHistory: [],
         );
         for (int i = 0; i < sampleSize; i++) {
           (int, int) operands = nr.randomOperands();
@@ -117,6 +123,7 @@ void main() {
           rangeMax: 5,
           operator: operator,
           quizModifier: quizModifier,
+          operandsHistory: [],
         );
         for (int i = 0; i < sampleSize; i++) {
           (int, int) operands = nr.randomOperands();
@@ -131,6 +138,7 @@ void main() {
           rangeMax: 5,
           operator: operator,
           quizModifier: quizModifier,
+          operandsHistory: [],
         );
         for (int i = 0; i < sampleSize; i++) {
           (int, int) operands = nr.randomOperands();
@@ -146,6 +154,7 @@ void main() {
           rangeMax: 5,
           operator: operator,
           quizModifier: quizModifier,
+          operandsHistory: [],
         );
         for (int i = 0; i < sampleSize; i++) {
           (int, int) operands = nr.randomOperands();

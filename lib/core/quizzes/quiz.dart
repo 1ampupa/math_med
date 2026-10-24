@@ -9,22 +9,24 @@ class Quiz {
   final Operator operator;
   final List<int> choices;
   final QuizModifier quizModifier;
-
-  static const int maxChoiceAmount = 3; // Temporary hardcoded
+  final int maxChoiceAmount;
 
   Quiz({
     required this.operandA,
     required this.operandB,
     required this.operator,
     required this.quizModifier,
+    required this.maxChoiceAmount,
     Random? random, // this can be set as seed
   }) : choices = generateChoices(
          calculateAnswer(operandA, operandB, operator),
+         maxChoiceAmount,
          operator,
+         quizModifier,
          random ?? Random(),
        );
 
-  static Quiz? generateQuiz(Operator operator, QuizModifier quizModifier) {
+  static Quiz? generateQuiz(Operator operator, QuizModifier quizModifier, List<(int, int)> operandsHistory, int maxChoiceAmount) {
     final (int, int) operands;
 
     try {
@@ -32,7 +34,8 @@ class Quiz {
       rangeMin: 1, // hardcoded
       rangeMax: 5, // hardcoded
       operator: operator,
-      quizModifier: quizModifier
+      quizModifier: quizModifier,
+      operandsHistory: operandsHistory,
       ).operands;
     } on StateError {
       return null;
@@ -42,7 +45,8 @@ class Quiz {
       operandA: operands.$1,
       operandB: operands.$2,
       operator: operator,
-      quizModifier: quizModifier
+      quizModifier: quizModifier,
+      maxChoiceAmount: maxChoiceAmount,
     );
   }
 
@@ -96,7 +100,9 @@ class Quiz {
 
   static List<int> generateChoices(
     int answer,
+    int maxChoiceAmount,
     Operator operator,
+    QuizModifier quizModifier,
     Random? random,
   ) {
     final rand = random ?? Random();
@@ -125,7 +131,7 @@ class Quiz {
       choices.add(fakeAnswer);
     }
 
-    return choices.toList()..shuffle();
+    return quizModifier.sortAnswersSet ? (choices.toList()..sort()) : (choices.toList()..shuffle());
   }
 
   // User answer

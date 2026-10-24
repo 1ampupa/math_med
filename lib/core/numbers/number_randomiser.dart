@@ -12,20 +12,22 @@ class NumberRandomiser {
   final Operator operator;
   late final (int, int) operands;
   final QuizModifier quizModifier;
+  final List<(int, int)> operandsHistory;
 
   NumberRandomiser({
     required this.rangeMin,
     required this.rangeMax,
     required this.operator,
     required this.quizModifier,
+    required this.operandsHistory,
   }) {
     operands = randomOperands();
   }
 
   (int, int) randomOperands() {
     int operandA, operandB;
-    int attempt = 0;
-    while (attempt < maxRandomiserAttempt) {
+
+    for (int attempt = 0; attempt < maxRandomiserAttempt; attempt++) {
       switch (operator) {
         case Operator.addition:
         // Fall through
@@ -63,59 +65,65 @@ class NumberRandomiser {
           break;
       }
 
+      // Quiz repeating operands
+      bool isRepeating = false;
+      for ((int, int) operands in operandsHistory) {
+        if ((operandA, operandB) == operands) {
+          isRepeating = true;
+          break;
+        }
+        if (!quizModifier.masterAllowCommutative &&
+        (operandB, operandA) == operands) {
+          isRepeating = true;
+          break;
+        }
+      }
+
+      if (isRepeating) continue;
+
       // Quiz modifiers masters
-      if (!quizModifier.masterAllowDuplicated && operandA == operandB) {
-        attempt++;
-        continue;
-      } else if (!quizModifier.masterAllowZero && (operandA == 0 || operandB == 0)) {
-        attempt++;
-        continue;
+      if ((!quizModifier.masterAllowDuplicated && operandA == operandB) ||
+          !quizModifier.masterAllowZero && (operandA == 0 || operandB == 0)) {
+            continue;
       }
 
       // Quiz modifiers operands
       switch (operator) {
         case Operator.addition:
           if (!quizModifier.additionAllowDuplicated && operandA == operandB) {
-            attempt++;
             continue;
           } else if (!quizModifier.additionAllowZero && (operandA == 0 || operandB == 0)) {
-            attempt++;
+            continue;
+          } else if (!quizModifier.additionAllowCommutative && (operandB, operandA) == operands) {
             continue;
           }
           break;
         case Operator.subtraction:
           if (!quizModifier.subtractionAllowDuplicated && operandA == operandB) {
-            attempt++;
             continue;
           } else if (!quizModifier.subtractionAllowZero && (operandA == 0 || operandB == 0)) {
-            attempt++;
             continue;
           } else if (!quizModifier.subtractionAllowNegative && (operandA < 0 || operandB < 0)) {
-            attempt++;
             continue;
           }
           break;
         case Operator.multiplication:
           if (!quizModifier.multiplicationAllowDuplicated && operandA == operandB) {
-            attempt++;
             continue;
           } else if (!quizModifier.multiplicationAllowZero && (operandA == 0 || operandB == 0)) {
-            attempt++;
             continue;
           } else if (!quizModifier.multiplicationAllowOne && (operandA == 1 || operandB == 1)) {
-            attempt++;
+            continue;
+          } else if (!quizModifier.multiplicationAllowCommutative && (operandB, operandA) == operands) {
             continue;
           }
           break;
         case Operator.division:
           if (!quizModifier.divisionAllowDuplicated && operandA == operandB) {
-            attempt++;
             continue;
           } else if (!quizModifier.divisionAllowZero && (operandA == 0 || operandB == 0)) {
-            attempt++;
             continue;
           } else if (!quizModifier.divisionAllowOne && (operandA == 1 || operandB == 1)) {
-            attempt++;
             continue;
           }
           break;

@@ -16,56 +16,59 @@ class Session {
   final int correctAnswer;
   final int incorrectAnswer;
 
+  //
+  final List<(int, int)> operandsHistory;
   final Quiz? currentQuiz;
   final bool isComplete;
 
   const Session({
     required this.operator,
     required this.quizModifier,
-    this.maxQuiz = 10,
-    this.maxChoices = 3,
+    required this.maxQuiz,
+    required this.maxChoices,
+
     this.quizCreated = 0,
     this.quizAnswered = 0,
     this.quizSkipped = 0,
     this.correctAnswer = 0,
     this.incorrectAnswer = 0,
+
+    this.operandsHistory = const [],
     this.currentQuiz,
     this.isComplete = false,
   });
 
   Session copyWith({
     Operator? operator,
-    QuizModifier? quizModifer,
+    QuizModifier? quizModifier,
+    int? maxQuiz,
+    int? maxChoices,
+
     int? quizCreated,
     int? quizAnswered,
     int? quizSkipped,
     int? correctAnswer,
     int? incorrectAnswer,
+
+    List<(int, int)>? operandsHistory,
     Quiz? currentQuiz,
     bool? isComplete,
   }) {
     return Session(
       operator: operator ?? this.operator,
-      quizModifier: quizModifer ?? quizModifier,
+      quizModifier: quizModifier ?? this.quizModifier,
+      maxQuiz: maxQuiz ?? this.maxQuiz,
+      maxChoices: maxChoices ?? this.maxChoices,
+
       quizCreated: quizCreated ?? this.quizCreated,
       quizAnswered: quizAnswered ?? this.quizAnswered,
       quizSkipped: quizSkipped ?? this.quizSkipped,
       correctAnswer: correctAnswer ?? this.correctAnswer,
       incorrectAnswer: incorrectAnswer ?? this.incorrectAnswer,
+
+      operandsHistory: operandsHistory ?? this.operandsHistory,
       currentQuiz: identical(currentQuiz, _unset) ? this.currentQuiz : currentQuiz,
       isComplete: isComplete ?? this.isComplete,
     );
   }
 }
-
-/*
-operator: state.operator,
-maxQuiz: state.maxQuiz,
-maxChoices: state.maxChoices,
-quizCreated: state.quizCreated + 1,
-quizAnswered: state.quizAnswered,
-quizSkipped: state.quizSkipped,
-correctAnswer: state.correctAnswer,
-incorrectAnswer: state.incorrectAnswer,
-currentQuiz: _generateQuiz(state.operator),
-*/
