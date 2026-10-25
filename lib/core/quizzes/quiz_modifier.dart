@@ -30,6 +30,11 @@ class QuizModifier {
   // Visual controls
   final bool sortAnswersSet;
 
+  /// [QuizModifier] allows Quiz to be generated within certain settings.
+  /// 
+  /// The master controls when setted to false, it can override its related operands settings to false as well.
+  /// 
+  /// Omitting argument would use its default value.
   QuizModifier({
     // Defaults
     this.masterAllowDuplicated = true,

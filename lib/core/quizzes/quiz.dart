@@ -11,6 +11,14 @@ class Quiz {
   final QuizModifier quizModifier;
   final int maxChoiceAmount;
 
+  /// [Quiz] is one of the most important element in MathMed, which provide a question to the [Session].
+  /// 
+  /// Provide [operandA], [operandB], [Operator], [QuizModifier] and [maxChoiceAmount] to generate a quiz.
+  /// Although, you should use [generateQuiz] function more, which is optimised for [Session] usage.
+  /// This constructor can be use if you have certain operands and operator.
+  /// 
+  /// Additionally, you can provide [Random] with [seed] to ensure the same result for testing purpose.
+
   Quiz({
     required this.operandA,
     required this.operandB,
@@ -25,6 +33,12 @@ class Quiz {
          quizModifier,
          random ?? Random(),
        );
+
+  /// Create a new random [Quiz] using [Operator], [QuizModifier], [operandsHistory] and [maxChoiceAmount]
+  /// 
+  /// #### Warning
+  /// If the provided [QuizModifier] is too strict, it might result in [StateError] which result null and
+  /// cause the [Session] to be destroyed.
 
   static Quiz? generateQuiz(Operator operator, QuizModifier quizModifier, List<(int, int)> operandsHistory, int maxChoiceAmount) {
     final (int, int) operands;

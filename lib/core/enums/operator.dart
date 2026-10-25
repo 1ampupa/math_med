@@ -1,3 +1,5 @@
+/// [Operator] is an arithmetic operation consist of addition (+), subtraction (-),
+/// multiplication (×) and division (÷).
 enum Operator {
   addition, subtraction, multiplication, division;
 

@@ -38,6 +38,10 @@ class Session {
     this.isComplete = false,
   });
 
+  /// Use when you want to change the [Session] state.
+  /// 
+  /// Omitting arguments here would preserve the old one.
+
   Session copyWith({
     Operator? operator,
     QuizModifier? quizModifier,

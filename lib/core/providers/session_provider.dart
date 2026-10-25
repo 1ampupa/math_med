@@ -24,6 +24,9 @@ class SessionNotifier extends Notifier<Session> {
     );
   }
 
+  /// Create new [Session], which you may provide custom [Operator], [QuizModifier],
+  /// [maxQuiz] and [maxChoices]
+  
   Session _createSession({
     required Operator operator,
     required QuizModifier quizModifier,
@@ -47,6 +50,8 @@ class SessionNotifier extends Notifier<Session> {
     );
   }
 
+  /// Start the current [Session]
+
   void start() {
     state = _createSession(
       operator: state.operator,
@@ -56,10 +61,14 @@ class SessionNotifier extends Notifier<Session> {
     );
   }
 
+  /// Restart the current [Session]
+
   void restart() {
     start();
     log("Session restarted", level: 0, name: "SessionProvider");
   }
+
+  /// Generate the next [Quiz]
 
   void nextQuiz(bool skip, bool correct) {
     state = state.copyWith(
@@ -107,6 +116,8 @@ class SessionNotifier extends Notifier<Session> {
     );
   }
 
+  /// Check if wheather the [Session] is completed or not
+
   bool isSessionComplete() {
     if (state.quizCreated >= state.maxQuiz) {
       state = state.copyWith(isComplete: true, currentQuiz: null);
@@ -115,6 +126,9 @@ class SessionNotifier extends Notifier<Session> {
     }
     return false;
   }
+
+  /// Uses when the current [Session] is impossible to continue,
+  /// such as cannot generator more quiz due to exceeding generator limit.
 
   void destroySession() {
     state = Session(

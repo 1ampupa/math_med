@@ -14,6 +14,16 @@ class NumberRandomiser {
   final QuizModifier quizModifier;
   final List<(int, int)> operandsHistory;
 
+  /// [NumberRandomiser] uses for random two numbers so call [operands].
+  /// 
+  /// Provide [rangeMin], [rangeMax], [Operator], [QuizModifier] and [operandsHistory]
+  /// 
+  /// Depends on [Operator] and [QuizModifier], it would have different behaviour.
+  /// 
+  /// ### Warning
+  /// Providing [rangeMin] and [rangeMax] too close to each other might make
+  /// the generator exceeds its maximum attempt at 100 and throw [StateError].
+
   NumberRandomiser({
     required this.rangeMin,
     required this.rangeMax,
@@ -24,6 +34,8 @@ class NumberRandomiser {
     operands = randomOperands();
   }
 
+  /// Random two operands as a integers record
+
   (int, int) randomOperands() {
     int operandA, operandB;
 
@@ -32,21 +44,21 @@ class NumberRandomiser {
         case Operator.addition:
         // Fall through
         case Operator.multiplication:
-          operandA = getRandomFromRange(
+          operandA = _getRandomFromRange(
             rangeMin,
             rangeMax,
           ); // [rangeMin, rangeMax]
-          operandB = getRandomFromRange(
+          operandB = _getRandomFromRange(
             rangeMin,
             rangeMax,
           ); // [rangeMin, rangeMax]
           break;
         case Operator.subtraction:
-          operandA = getRandomFromRange(
+          operandA = _getRandomFromRange(
             rangeMin,
             rangeMax,
           ); // [rangeMin, rangeMax]
-          operandB = getRandomFromRange(
+          operandB = _getRandomFromRange(
             rangeMin,
             rangeMax,
           ); // [rangeMin, rangeMax]
@@ -56,8 +68,8 @@ class NumberRandomiser {
           break;
         case Operator.division:
           int minDivisor = max(1, rangeMin); // Prevent divided by 0
-          int divisor = getRandomFromRange(minDivisor, rangeMax);
-          int quotient = getRandomFromRange(rangeMin, rangeMax);
+          int divisor = _getRandomFromRange(minDivisor, rangeMax);
+          int quotient = _getRandomFromRange(rangeMin, rangeMax);
 
           // Produce whole number division
           operandA = quotient * divisor;
@@ -134,7 +146,7 @@ class NumberRandomiser {
     throw StateError("bro we dead");
   }
 
-  int getRandomFromRange(int rangeMin, int rangeMax) {
+  int _getRandomFromRange(int rangeMin, int rangeMax) {
     return rangeMin + _randomiser.nextInt(rangeMax - rangeMin + 1);
   }
 }
