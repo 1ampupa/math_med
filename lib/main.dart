@@ -7,7 +7,7 @@ import 'package:math_med/core/enums/app_state.dart';
 import 'package:math_med/core/providers/app_state_provider.dart';
 
 import 'package:math_med/gui/pages/title_page.dart';
-import 'package:math_med/gui/pages/create_session_page.dart';
+import 'package:math_med/gui/pages/lobby_page.dart';
 import 'package:math_med/gui/pages/game_page.dart';
 
 
@@ -72,7 +72,7 @@ class MathMedApp extends ConsumerWidget {
 
       home: switch (appState) {
         AppState.inTitle => TitlePage(), // we dont have it yet :sob:
-        AppState.inLobby => CreateSessionPage(), // same
+        AppState.inLobby => LobbyPage(), // same
         AppState.inGame => GamePage(),
       }
     );

@@ -13,16 +13,31 @@ class TitlePage extends ConsumerWidget{
     return Scaffold(
       body: SafeArea(
         minimum: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Text("MathMed"),
-            ElevatedButton(
-              onPressed: () {
-                ref.read(appStateProvider.notifier).changeState(AppState.inLobby);
-              },
-              child: Text("New game")
-            )
-          ],
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 10,
+            children: [
+              Text("MathMed"),
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(appStateProvider.notifier).changeState(AppState.inLobby);
+                },
+                child: Text("New game")
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("(very temporary trust me)\n"),
+                  Text(
+                    "Server = 192.168.1.0 wait ts doesnt even need internet lmao",
+                  ),
+                  Text("MathMed Alpha Beta Pre Pre Demo V10^-9"),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
