@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:math_med/core/enums/app_state.dart';
+import 'package:math_med/core/providers/app_state_provider.dart';
 import 'package:math_med/core/providers/session_provider.dart';
 import 'package:math_med/core/sessions/session.dart';
 
@@ -10,7 +12,7 @@ class ResultPage extends ConsumerWidget {
   const ResultPage({super.key, required this.session});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {  
     return Scaffold(
       body: SafeArea(
         minimum: EdgeInsets.all(20),
@@ -68,12 +70,27 @@ class ResultPage extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
+                spacing: 15,
+                children: [                 
+                  ElevatedButton(
+                    onPressed: () {
+                      ref.read(appStateProvider.notifier).changeState(AppState.inLobby);
+                      ref.read(sessionProvider.notifier).destroySession();
+                    },
+                    child: Text("Return to lobby"),
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       ref.read(sessionProvider.notifier).restart();
                     },
                     child: Text("Play again"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref.read(appStateProvider.notifier).changeState(AppState.inTitle);
+                      ref.read(sessionProvider.notifier).destroySession();
+                    },
+                    child: Text("Return to title"),
                   ),
                 ],
               ),

@@ -1,8 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:math_med/core/enums/app_state.dart';
+import 'package:math_med/core/providers/app_state_provider.dart';
 import 'package:math_med/core/providers/session_provider.dart';
 
 class ErrorPage extends ConsumerWidget {
@@ -47,9 +47,10 @@ class ErrorPage extends ConsumerWidget {
                           ref.read(sessionProvider.notifier).restart(),
                     ),
                     ElevatedButton(
-                      child: Text("Exit"),
-                      onPressed: () =>
-                          exit(0)
+                      child: Text("Return to title"),
+                      onPressed: () {
+                        ref.read(appStateProvider.notifier).changeState(AppState.inTitle);
+                      }
                     ),
                   ],
                 ),

@@ -3,7 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:window_manager/window_manager.dart';
 
+import 'package:math_med/core/enums/app_state.dart';
+import 'package:math_med/core/providers/app_state_provider.dart';
+
+import 'package:math_med/gui/pages/title_page.dart';
+import 'package:math_med/gui/pages/create_session_page.dart';
 import 'package:math_med/gui/pages/game_page.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,11 +32,13 @@ void main() async {
   runApp(const ProviderScope(child: MathMedApp()));
 }
 
-class MathMedApp extends StatelessWidget {
+class MathMedApp extends ConsumerWidget {
   const MathMedApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AppState appState = ref.watch(appStateProvider);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "MathMed",
@@ -62,7 +70,11 @@ class MathMedApp extends StatelessWidget {
         )
       ),
 
-      home: const GamePage(),
+      home: switch (appState) {
+        AppState.inTitle => TitlePage(), // we dont have it yet :sob:
+        AppState.inLobby => CreateSessionPage(), // same
+        AppState.inGame => GamePage(),
+      }
     );
   }
 }

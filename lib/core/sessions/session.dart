@@ -8,7 +8,7 @@ class Session {
   final Operator operator;
   final QuizModifier quizModifier;
   final int maxQuiz;
-  final int maxChoices;
+  final int maxChoice;
 
   final int quizCreated;
   final int quizAnswered;
@@ -25,7 +25,7 @@ class Session {
     required this.operator,
     required this.quizModifier,
     required this.maxQuiz,
-    required this.maxChoices,
+    required this.maxChoice,
 
     this.quizCreated = 0,
     this.quizAnswered = 0,
@@ -46,7 +46,7 @@ class Session {
     Operator? operator,
     QuizModifier? quizModifier,
     int? maxQuiz,
-    int? maxChoices,
+    int? maxChoice,
 
     int? quizCreated,
     int? quizAnswered,
@@ -62,7 +62,7 @@ class Session {
       operator: operator ?? this.operator,
       quizModifier: quizModifier ?? this.quizModifier,
       maxQuiz: maxQuiz ?? this.maxQuiz,
-      maxChoices: maxChoices ?? this.maxChoices,
+      maxChoice: maxChoice ?? this.maxChoice,
 
       quizCreated: quizCreated ?? this.quizCreated,
       quizAnswered: quizAnswered ?? this.quizAnswered,

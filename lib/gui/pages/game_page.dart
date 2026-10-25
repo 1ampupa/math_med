@@ -13,8 +13,11 @@ class GamePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Session session = ref.watch(sessionProvider);
     
+    final Session? session = ref.watch(sessionProvider);
+    
+    if (session == null) return ErrorPage(errorText: "Session not found.");
+
     if (session.currentQuiz == null && !session.isComplete) {
       return ErrorPage(errorText: "There's no quiz available.\nThis might happen if your quiz modifiers settings are too strict!");
     }

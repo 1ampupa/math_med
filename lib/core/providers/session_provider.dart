@@ -7,33 +7,23 @@ import 'package:math_med/core/quizzes/quiz.dart';
 import 'package:math_med/core/quizzes/quiz_modifier.dart';
 import 'package:math_med/core/sessions/session.dart';
 
-class SessionNotifier extends Notifier<Session> {
+class SessionNotifier extends Notifier<Session?> {
 
   static const int maxOperandsHistory = 5;
 
   @override
-  Session build() {
-    final operator = Operator.addition; // hardcoded
-    final QuizModifier quizModifier = QuizModifier(); // hardcoded
-
-    return _createSession(
-      operator: operator,
-      quizModifier: quizModifier,
-      maxQuiz: 100,
-      maxChoices: 3,
-    );
-  }
+  Session? build() => null;
 
   /// Create new [Session], which you may provide custom [Operator], [QuizModifier],
-  /// [maxQuiz] and [maxChoices]
+  /// [maxQuiz] and [maxChoice]
   
   Session _createSession({
     required Operator operator,
     required QuizModifier quizModifier,
     required int maxQuiz,
-    required int maxChoices,
+    required int maxChoice,
   }) {
-    final Quiz? quiz = Quiz.generateQuiz(operator, quizModifier, [], maxChoices);
+    final Quiz? quiz = Quiz.generateQuiz(operator, quizModifier, [], maxChoice);
 
     if (quiz == null) {
       throw StateError("Failed to generate initial quiz");
@@ -43,58 +33,70 @@ class SessionNotifier extends Notifier<Session> {
       operator: operator,
       quizModifier: quizModifier,
       maxQuiz: maxQuiz,
-      maxChoices: maxChoices,
+      maxChoice: maxChoice,
       quizCreated: 1,
       currentQuiz: quiz,
       operandsHistory: [(quiz.operandA, quiz.operandB)],
     );
   }
 
-  /// Start the current [Session]
+  /// Start the new [Session]
 
-  void start() {
+  void start(Operator operator, QuizModifier quizModifier, int maxQuiz, int maxChoice) {
     state = _createSession(
-      operator: state.operator,
-      quizModifier: state.quizModifier,
-      maxQuiz: state.maxQuiz,
-      maxChoices: state.maxChoices,
+      operator: operator,
+      quizModifier: quizModifier,
+      maxQuiz: maxQuiz,
+      maxChoice: maxChoice,
     );
   }
 
   /// Restart the current [Session]
 
   void restart() {
-    start();
+    final currentSession = state;
+    if (currentSession == null) throw StateError;
+
+    start(currentSession.operator, currentSession.quizModifier, currentSession.maxQuiz, currentSession.maxChoice);
     log("Session restarted", level: 0, name: "SessionProvider");
   }
 
   /// Generate the next [Quiz]
 
   void nextQuiz(bool skip, bool correct) {
-    state = state.copyWith(
-      quizAnswered: !skip ? state.quizAnswered + 1 : state.quizAnswered,
-      quizSkipped: skip ? state.quizSkipped + 1 : state.quizSkipped,
+    final currentSession = state;
+    if (currentSession == null) throw StateError;
+
+    state = currentSession.copyWith(
+      quizAnswered: !skip
+          ? currentSession.quizAnswered + 1
+          : currentSession.quizAnswered,
+      quizSkipped: skip
+          ? currentSession.quizSkipped + 1 
+          : currentSession.quizSkipped,
       correctAnswer: (!skip && correct)
-          ? state.correctAnswer + 1
-          : state.correctAnswer,
+          ? currentSession.correctAnswer + 1
+          : currentSession.correctAnswer,
       incorrectAnswer: (!skip && !correct)
-          ? state.incorrectAnswer + 1
-          : state.incorrectAnswer,
+          ? currentSession.incorrectAnswer + 1
+          : currentSession.incorrectAnswer,
     );
 
+    final updatedSession = state!;
+
     log(
-      "Answered: ${state.quizAnswered} Skipped: ${state.quizSkipped} C:W = ${state.correctAnswer} : ${state.incorrectAnswer}",
+      "Answered: ${updatedSession.quizAnswered} Skipped: ${updatedSession.quizSkipped} C:W = ${updatedSession.correctAnswer} : ${updatedSession.incorrectAnswer}",
       level: 0,
       name: "SessionProvider.telemetry",
     );
 
-    if (isSessionComplete()) return;
+    if (isSessionComplete(updatedSession)) return;
 
     final Quiz? newQuiz = Quiz.generateQuiz(
-      state.operator,
-      state.quizModifier,
-      state.operandsHistory,
-      state.maxChoices
+      updatedSession.operator,
+      updatedSession.quizModifier,
+      updatedSession.operandsHistory,
+      updatedSession.maxChoice
     );
 
     if (newQuiz == null) {
@@ -103,14 +105,14 @@ class SessionNotifier extends Notifier<Session> {
     }
 
     // Check for repeating operands
-    List<(int, int)> newOperandsHistory = [...state.operandsHistory];
+    List<(int, int)> newOperandsHistory = [...updatedSession.operandsHistory];
     if (newOperandsHistory.length >= maxOperandsHistory) {
       newOperandsHistory.removeAt(0);
     }
     newOperandsHistory.add((newQuiz.operandA, newQuiz.operandB));
 
-    state = state.copyWith(
-      quizCreated: state.quizCreated + 1,
+    state = updatedSession.copyWith(
+      quizCreated: updatedSession.quizCreated + 1,
       currentQuiz: newQuiz,
       operandsHistory: newOperandsHistory,
     );
@@ -118,29 +120,22 @@ class SessionNotifier extends Notifier<Session> {
 
   /// Check if wheather the [Session] is completed or not
 
-  bool isSessionComplete() {
-    if (state.quizCreated >= state.maxQuiz) {
-      state = state.copyWith(isComplete: true, currentQuiz: null);
+  bool isSessionComplete(Session session) {
+    if (session.quizCreated >= session.maxQuiz) {
+      state = session.copyWith(isComplete: true, currentQuiz: null);
       log("Session completed", level: 0, name: "SessionProvider");
       return true;
     }
     return false;
   }
 
-  /// Uses when the current [Session] is impossible to continue,
+  /// Uses when the current [Session] is completed or impossible to continue,
   /// such as cannot generator more quiz due to exceeding generator limit.
 
-  void destroySession() {
-    state = Session(
-      operator: state.operator,
-      quizModifier: state.quizModifier,
-      maxQuiz: state.maxQuiz,
-      maxChoices: state.maxChoices,
-      currentQuiz: null, // :sob:
-    );
-  }
+  void destroySession() => state = null;
+
 }
 
-final sessionProvider = NotifierProvider<SessionNotifier, Session>(
+final sessionProvider = NotifierProvider<SessionNotifier, Session?>(
   SessionNotifier.new,
 );

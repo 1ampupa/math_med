@@ -11,7 +11,9 @@ class AnswerChoice extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Session session = ref.watch(sessionProvider);
+    final Session? session = ref.watch(sessionProvider);
+
+    if (session == null) throw StateError;
 
     return Column(
       mainAxisAlignment: .center,
