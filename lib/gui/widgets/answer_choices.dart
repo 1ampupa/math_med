@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:math_med/core/providers/app_state_data_provider.dart';
 import 'package:math_med/core/sessions/session.dart';
 import 'package:math_med/core/providers/session_provider.dart';
 
@@ -34,7 +35,10 @@ class AnswerChoice extends ConsumerWidget {
               },
               child: Text(
                 "${session.currentQuiz!.choices[i]}",
-                textScaler: TextScaler.linear(3),
+                style: TextStyle(
+                  fontSize: 50,
+                  color: ref.read(appStateDataProvider).selectedOperator.colour
+                ),
               ),
             ),
           )

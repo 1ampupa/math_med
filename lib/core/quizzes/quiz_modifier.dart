@@ -28,7 +28,7 @@ class QuizModifier {
   final bool divisionAllowOne;                // a / 1 || 1 / 1
 
   // Visual controls
-  final bool sortAnswersSet;
+  final bool shuffleChoices;
 
   /// [QuizModifier] allows Quiz to be generated within certain settings.
   /// 
@@ -58,6 +58,6 @@ class QuizModifier {
     this.divisionAllowZero = false,            
     this.divisionAllowOne = false,       
 
-    this.sortAnswersSet = false,
+    this.shuffleChoices = true,
   });
 }

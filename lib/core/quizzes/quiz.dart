@@ -145,7 +145,7 @@ class Quiz {
       choices.add(fakeAnswer);
     }
 
-    return quizModifier.sortAnswersSet ? (choices.toList()..sort()) : (choices.toList()..shuffle());
+    return quizModifier.shuffleChoices ? (choices.toList()..shuffle()) : (choices.toList()..sort());
   }
 
   // User answer

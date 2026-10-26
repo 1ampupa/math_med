@@ -123,7 +123,7 @@ class SessionNotifier extends Notifier<Session?> {
   bool isSessionComplete(Session session) {
     if (session.quizCreated >= session.maxQuiz) {
       state = session.copyWith(isComplete: true, currentQuiz: null);
-      log("Session completed", level: 0, name: "SessionProvider");
+      
       return true;
     }
     return false;
@@ -132,7 +132,10 @@ class SessionNotifier extends Notifier<Session?> {
   /// Uses when the current [Session] is completed or impossible to continue,
   /// such as cannot generator more quiz due to exceeding generator limit.
 
-  void destroySession() => state = null;
+  void destroySession() {
+    state = null;
+    log("Session abandoned", level: 0, name: "SessionProvider");
+  }
 
 }
 

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:math_med/core/enums/app_state.dart';
-import 'package:math_med/core/providers/app_state_provider.dart';
+import 'package:math_med/core/providers/app_state_data_provider.dart';
 
 import 'package:math_med/gui/pages/title_page.dart';
 import 'package:math_med/gui/pages/lobby_page.dart';
@@ -37,7 +37,7 @@ class MathMedApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppState appState = ref.watch(appStateProvider);
+    final AppState appState = ref.watch(appStateDataProvider).appState;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

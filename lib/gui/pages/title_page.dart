@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:math_med/core/enums/app_state.dart';
-import 'package:math_med/core/providers/app_state_provider.dart';
+import 'package:math_med/core/providers/app_state_data_provider.dart';
+
+import 'package:math_med/gui/widgets/math_med_button.dart';
 
 class TitlePage extends ConsumerWidget{
   
@@ -19,12 +21,14 @@ class TitlePage extends ConsumerWidget{
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 10,
             children: [
-              Text("MathMed"),
-              ElevatedButton(
-                onPressed: () {
-                  ref.read(appStateProvider.notifier).changeState(AppState.inLobby);
-                },
-                child: Text("New game")
+              Text("Welcome to\nMathMed", textAlign: TextAlign.center,),
+              MathMedButton(
+                text: "PLAY",
+                primaryButton: true,
+                textFontFamily: "Anton",
+                textSize: 30,
+                colourFollowsOperator: false,
+                function: () => ref.read(appStateDataProvider.notifier).changeState(AppState.inLobby)
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

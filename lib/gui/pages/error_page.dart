@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:math_med/core/enums/app_state.dart';
-import 'package:math_med/core/providers/app_state_provider.dart';
+import 'package:math_med/core/providers/app_state_data_provider.dart';
 import 'package:math_med/core/providers/session_provider.dart';
+
+import 'package:math_med/gui/widgets/math_med_button.dart';
 
 class ErrorPage extends ConsumerWidget {
 
@@ -21,7 +23,7 @@ class ErrorPage extends ConsumerWidget {
         minimum: EdgeInsets.all(20),
         child: Center(
           child: Padding(
-            padding: EdgeInsetsGeometry.all(100),
+            padding: EdgeInsetsGeometry.all(90),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,15 +43,29 @@ class ErrorPage extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 50,
                   children: [
-                    ElevatedButton(
-                      child: Text("Restart"),
-                      onPressed: () =>
+                    MathMedButton(
+                      text: "Restart",
+                      textSize: 14,
+                      buttonSize: Size(150, 30),
+                      function: () =>
                           ref.read(sessionProvider.notifier).restart(),
                     ),
-                    ElevatedButton(
-                      child: Text("Return to title"),
-                      onPressed: () {
-                        ref.read(appStateProvider.notifier).changeState(AppState.inTitle);
+                    MathMedButton(
+                      text: "Return to lobby",
+                      textSize: 14,
+                      buttonSize: Size(150, 30),
+                      colourFollowsOperator: false,
+                      function: () {
+                        ref.read(appStateDataProvider.notifier).changeState(AppState.inLobby);
+                      }
+                    ),
+                    MathMedButton(
+                      text: "Return to title",
+                      textSize: 14,
+                      buttonSize: Size(150, 30),
+                      colourFollowsOperator: false,
+                      function: () {
+                        ref.read(appStateDataProvider.notifier).changeState(AppState.inTitle);
                       }
                     ),
                   ],

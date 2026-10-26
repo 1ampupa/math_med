@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:math_med/core/enums/app_state.dart';
-import 'package:math_med/core/providers/app_state_provider.dart';
+import 'package:math_med/core/providers/app_state_data_provider.dart';
 import 'package:math_med/core/providers/session_provider.dart';
 import 'package:math_med/core/sessions/session.dart';
+import 'package:math_med/gui/widgets/math_med_button.dart';
 
 class ResultPage extends ConsumerWidget {
   final Session session;
@@ -12,7 +13,7 @@ class ResultPage extends ConsumerWidget {
   const ResultPage({super.key, required this.session});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {  
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
         minimum: EdgeInsets.all(20),
@@ -40,7 +41,7 @@ class ResultPage extends ConsumerWidget {
                           Icon(
                             Icons.check,
                             size: 100,
-                            color: Color(0xFF00FF00),
+                            color: Color(0xFF5FFF5F),
                           ),
                           Text(
                             "${session.correctAnswer}",
@@ -55,7 +56,7 @@ class ResultPage extends ConsumerWidget {
                           Icon(
                             Icons.close_sharp,
                             size: 100,
-                            color: Color(0xFFFF0000),
+                            color: Color(0xFFFF5E49),
                           ),
                           Text(
                             "${session.incorrectAnswer}",
@@ -69,28 +70,41 @@ class ResultPage extends ConsumerWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 spacing: 15,
-                children: [                 
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.read(appStateProvider.notifier).changeState(AppState.inLobby);
+                children: [
+                  MathMedButton(
+                    text: "Return to lobby",
+                    textSize: 16,
+                    colourFollowsOperator: false,
+                    buttonSize: Size(160, 40),
+                    function: () {
+                      ref
+                          .read(appStateDataProvider.notifier)
+                          .changeState(AppState.inLobby);
                       ref.read(sessionProvider.notifier).destroySession();
-                    },
-                    child: Text("Return to lobby"),
+                    }
                   ),
-                  ElevatedButton(
-                    onPressed: () {
+                  MathMedButton(
+                    text: "PLAY AGAIN",
+                    textSize: 20,
+                    fontWeight: const FontWeight(800),
+                    buttonSize: Size(175, 50),
+                    function: () {  
                       ref.read(sessionProvider.notifier).restart();
-                    },
-                    child: Text("Play again"),
+                    }
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.read(appStateProvider.notifier).changeState(AppState.inTitle);
+                  MathMedButton(
+                    text: "Return to title",
+                    textSize: 16,
+                    colourFollowsOperator: false,
+                    buttonSize: Size(160, 40),
+                    function: () {
+                      ref
+                          .read(appStateDataProvider.notifier)
+                          .changeState(AppState.inTitle);
                       ref.read(sessionProvider.notifier).destroySession();
-                    },
-                    child: Text("Return to title"),
+                    }
                   ),
                 ],
               ),
