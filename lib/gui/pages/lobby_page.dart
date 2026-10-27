@@ -17,17 +17,17 @@ class LobbyPage extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<LobbyPage> createState() => _LobbyPageState();
-
 }
 
 class _LobbyPageState extends ConsumerState<LobbyPage> {
-
   late final TextEditingController maxQuizController;
 
   @override
   void initState() {
     super.initState();
-    maxQuizController = TextEditingController(text: ref.watch(appStateDataProvider).maxQuiz.toString());
+    maxQuizController = TextEditingController(
+      text: ref.watch(appStateDataProvider).maxQuiz.toString(),
+    );
   }
 
   @override
@@ -74,21 +74,25 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                 spacing: 5,
                 children: [
                   Row(
-                    spacing: 10,
+                    spacing: 5,
                     children: [
                       Flexible(
                         child: Container(
-                          height: 80,
-                          color: selectedOperator.colour,
+                          height: 85,
+                          decoration: BoxDecoration(
+                            color: selectedOperator.colour,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               spacing: 50,
                               children: [
                                 const Text(
                                   "OPERATOR",
                                   style: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 25,
                                     fontWeight: FontWeight(800),
                                   ),
                                 ),
@@ -99,37 +103,41 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                                     fontSize: 60,
                                   ),
                                 ),
+                                MathMedButton(
+                                  buttonSize: Size(120, 40),
+                                  text: "Change",
+                                  textSize: 18,
+                                  function: () {
+                                    switch (selectedOperator) {
+                                      case Operator.addition:
+                                        ref
+                                            .read(appStateDataProvider.notifier)
+                                            .setOperator(Operator.subtraction);
+                                        break;
+                                      case Operator.subtraction:
+                                        ref
+                                            .read(appStateDataProvider.notifier)
+                                            .setOperator(
+                                              Operator.multiplication,
+                                            );
+                                        break;
+                                      case Operator.multiplication:
+                                        ref
+                                            .read(appStateDataProvider.notifier)
+                                            .setOperator(Operator.division);
+                                        break;
+                                      case Operator.division:
+                                        ref
+                                            .read(appStateDataProvider.notifier)
+                                            .setOperator(Operator.addition);
+                                        break;
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           ),
                         ),
-                      ),
-                      MathMedButton(
-                        text: "Change",
-                        function: () {
-                          switch (selectedOperator) {
-                            case Operator.addition:
-                              ref
-                                  .read(appStateDataProvider.notifier)
-                                  .setOperator(Operator.subtraction);
-                              break;
-                            case Operator.subtraction:
-                              ref
-                                  .read(appStateDataProvider.notifier)
-                                  .setOperator(Operator.multiplication);
-                              break;
-                            case Operator.multiplication:
-                              ref
-                                  .read(appStateDataProvider.notifier)
-                                  .setOperator(Operator.division);
-                              break;
-                            case Operator.division:
-                              ref
-                                  .read(appStateDataProvider.notifier)
-                                  .setOperator(Operator.addition);
-                              break;
-                          }
-                        },
                       ),
                     ],
                   ),
@@ -139,7 +147,10 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                       children: [
                         Expanded(
                           child: Container(
-                            color: selectedOperator.colour.withAlpha(150),
+                            decoration: BoxDecoration(
+                              color: selectedOperator.colour.withAlpha(150),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             child: Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -155,14 +166,19 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                                       children: [
                                         Text(
                                           "How many quiz do you want?",
-                                          style: TextStyle(
-                                            fontSize: 18
-                                          ),
+                                          style: TextStyle(fontSize: 18),
                                         ),
                                         Expanded(
                                           child: TextField(
                                             onChanged: (value) {
-                                              ref.read(appStateDataProvider.notifier).setMaxQuiz(int.tryParse(value) ?? 10);
+                                              ref
+                                                  .read(
+                                                    appStateDataProvider
+                                                        .notifier,
+                                                  )
+                                                  .setMaxQuiz(
+                                                    int.tryParse(value) ?? 10,
+                                                  );
                                             },
                                             keyboardType: TextInputType.number,
                                             inputFormatters: [
@@ -172,7 +188,9 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                                             controller: maxQuizController,
                                             decoration: const InputDecoration(
                                               border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(100))
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(100),
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -187,7 +205,10 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                         ),
                         Expanded(
                           child: Container(
-                            color: selectedOperator.colour.withAlpha(150),
+                            decoration: BoxDecoration(
+                              color: selectedOperator.colour.withAlpha(150),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             child: Center(
                               child: Text(
                                 "User\nComing soon",

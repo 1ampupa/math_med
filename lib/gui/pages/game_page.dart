@@ -68,6 +68,13 @@ class GamePage extends ConsumerWidget {
                       backgroundColor: Colors.grey.shade800,
                     ),
                   ),
+                  Text(
+                    "${session.quizCreated}/${session.maxQuiz}",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: ref.read(appStateDataProvider).selectedOperator.colour
+                    ),
+                  ),
                 ],
               ),
               Column(
