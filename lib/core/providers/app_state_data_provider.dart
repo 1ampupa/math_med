@@ -17,8 +17,16 @@ class AppStateDataProvider extends Notifier<AppStateData> {
     state = state.copyWith(errorMessage: message);
   }
 
-  void changeOperator(Operator operator) {
+  void setOperator(Operator operator) {
     state = state.copyWith(selectedOperator: operator);
+  }
+
+  void setMaxQuiz(int maxQuiz) {
+    state = state.copyWith(maxQuiz: maxQuiz);
+  }
+
+  void setMaxChoice(int maxChoice) {
+    state = state.copyWith(maxChoice: maxChoice);
   }
 
 }

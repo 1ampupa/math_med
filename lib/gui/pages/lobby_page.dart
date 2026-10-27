@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:math_med/core/enums/app_state.dart';
@@ -9,12 +12,35 @@ import 'package:math_med/core/quizzes/quiz_modifier.dart';
 
 import 'package:math_med/gui/widgets/math_med_button.dart';
 
-class LobbyPage extends ConsumerWidget {
+class LobbyPage extends ConsumerStatefulWidget {
   const LobbyPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    Operator selectedOperator =  ref.watch(appStateDataProvider).selectedOperator;
+  ConsumerState<LobbyPage> createState() => _LobbyPageState();
+
+}
+
+class _LobbyPageState extends ConsumerState<LobbyPage> {
+
+  late final TextEditingController maxQuizController;
+
+  @override
+  void initState() {
+    super.initState();
+    maxQuizController = TextEditingController(text: ref.watch(appStateDataProvider).maxQuiz.toString());
+  }
+
+  @override
+  void dispose() {
+    maxQuizController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Operator selectedOperator = ref
+        .watch(appStateDataProvider)
+        .selectedOperator;
 
     return Scaffold(
       body: SafeArea(
@@ -32,14 +58,17 @@ class LobbyPage extends ConsumerWidget {
                   text: "<",
                   colourFollowsOperator: false,
                   buttonSize: Size(40, 40),
-                  function: () => ref.read(appStateDataProvider.notifier).changeState(AppState.inTitle)
+                  function: () => ref
+                      .read(appStateDataProvider.notifier)
+                      .changeState(AppState.inTitle),
                 ),
                 Text(
-                  "LOBBY",
+                  "CUSTOM LOBBY",
                   style: TextStyle(fontFamily: "Anton", fontSize: 50),
                 ),
               ],
             ),
+            Divider(),
             Expanded(
               child: Column(
                 spacing: 5,
@@ -60,16 +89,16 @@ class LobbyPage extends ConsumerWidget {
                                   "OPERATOR",
                                   style: TextStyle(
                                     fontSize: 30,
-                                    fontWeight: FontWeight(800)
+                                    fontWeight: FontWeight(800),
                                   ),
                                 ),
                                 Text(
                                   selectedOperator.name.toUpperCase(),
                                   style: TextStyle(
                                     fontFamily: "Anton",
-                                    fontSize: 60
+                                    fontSize: 60,
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -78,18 +107,26 @@ class LobbyPage extends ConsumerWidget {
                       MathMedButton(
                         text: "Change",
                         function: () {
-                          switch (selectedOperator) {                           
+                          switch (selectedOperator) {
                             case Operator.addition:
-                              ref.read(appStateDataProvider.notifier).changeOperator(Operator.subtraction);
+                              ref
+                                  .read(appStateDataProvider.notifier)
+                                  .setOperator(Operator.subtraction);
                               break;
                             case Operator.subtraction:
-                              ref.read(appStateDataProvider.notifier).changeOperator(Operator.multiplication);
+                              ref
+                                  .read(appStateDataProvider.notifier)
+                                  .setOperator(Operator.multiplication);
                               break;
                             case Operator.multiplication:
-                              ref.read(appStateDataProvider.notifier).changeOperator(Operator.division);
+                              ref
+                                  .read(appStateDataProvider.notifier)
+                                  .setOperator(Operator.division);
                               break;
                             case Operator.division:
-                              ref.read(appStateDataProvider.notifier).changeOperator(Operator.addition);
+                              ref
+                                  .read(appStateDataProvider.notifier)
+                                  .setOperator(Operator.addition);
                               break;
                           }
                         },
@@ -104,9 +141,46 @@ class LobbyPage extends ConsumerWidget {
                           child: Container(
                             color: selectedOperator.colour.withAlpha(150),
                             child: Center(
-                              child: Text(
-                                "Quiz Modifier Customisation\nComing soon",
-                                textAlign: TextAlign.center,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  spacing: 5,
+                                  children: [
+                                    Text(
+                                      "Modifiers",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    Row(
+                                      spacing: 10,
+                                      children: [
+                                        Text(
+                                          "How many quiz do you want?",
+                                          style: TextStyle(
+                                            fontSize: 18
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: TextField(
+                                            onChanged: (value) {
+                                              ref.read(appStateDataProvider.notifier).setMaxQuiz(int.tryParse(value) ?? 10);
+                                            },
+                                            keyboardType: TextInputType.number,
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly,
+                                            ],
+                                            controller: maxQuizController,
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(100))
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -131,15 +205,28 @@ class LobbyPage extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MathMedButton(             
+                MathMedButton(
                   text: "START",
                   textFontFamily: "Anton",
                   textSize: 30,
                   function: () {
-                    ref.read(sessionProvider.notifier).start(selectedOperator, QuizModifier(), 10, 3);
-                    ref.read(appStateDataProvider.notifier).changeState(AppState.inGame);
+                    final int? maxQuiz = int.tryParse(maxQuizController.text);
+                    if (maxQuiz == null || maxQuiz == 0) {
+                      log(
+                        "Please enter a valid max quiz.",
+                        level: 0,
+                        name: "Lobby",
+                      );
+                      return;
+                    }
+                    ref
+                        .read(sessionProvider.notifier)
+                        .start(selectedOperator, QuizModifier(), maxQuiz, 3);
+                    ref
+                        .read(appStateDataProvider.notifier)
+                        .changeState(AppState.inGame);
                   },
-                )
+                ),
               ],
             ),
           ],

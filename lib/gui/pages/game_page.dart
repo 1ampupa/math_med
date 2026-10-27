@@ -53,10 +53,19 @@ class GamePage extends ConsumerWidget {
                     }
                   ),
                   Text(
-                    "${session.operator.name.toUpperCase()} // C:W ${session.correctAnswer} : ${session.incorrectAnswer}",
+                    session.operator.name.toUpperCase(),
                     style: TextStyle(
                       fontSize: 16,
                       color: ref.read(appStateDataProvider).selectedOperator.colour
+                    ),
+                  ),
+                  Expanded(
+                    child: LinearProgressIndicator(
+                      value: ((session.quizAnswered + session.quizSkipped) / session.maxQuiz),
+                      minHeight: 8,
+                      borderRadius: BorderRadius.circular(100),
+                      color: ref.read(appStateDataProvider).selectedOperator.colour,
+                      backgroundColor: Colors.grey.shade800,
                     ),
                   ),
                 ],
