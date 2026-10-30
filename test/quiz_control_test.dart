@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:math_med/core/enums/operator.dart';
 import 'package:math_med/core/numbers/number_randomiser.dart';
-import 'package:math_med/core/quizzes/quiz_modifier.dart';
+import 'package:math_med/core/sessions/session_settings.dart';
 
 void main() {
   const int sampleSize = 100;
 
   group("Group A: Default Addition", () {
-    QuizModifier quizModifier = QuizModifier();
+    SessionSettings sessionSettings = SessionSettings();
 
     test("A1: No zero in addition operands", () {
       const Operator operator = Operator.addition;
@@ -15,7 +15,7 @@ void main() {
         rangeMin: 1,
         rangeMax: 5,
         operator: operator,
-        quizModifier: quizModifier,
+        sessionSettings: sessionSettings,
         operandsHistory: [],
       );
       for (int i = 0; i < sampleSize; i++) {
@@ -27,7 +27,7 @@ void main() {
   });
 
   group("Group B: Default Subtraction", () {
-    QuizModifier quizModifier = QuizModifier();
+    SessionSettings sessionSettings = SessionSettings();
 
     test("B1: No duplicated subtraction operands", () {
       const Operator operator = Operator.subtraction;
@@ -35,7 +35,7 @@ void main() {
         rangeMin: 1,
         rangeMax: 5,
         operator: operator,
-        quizModifier: quizModifier,
+        sessionSettings: sessionSettings,
         operandsHistory: [],
       );
       for (int i = 0; i < sampleSize; i++) {
@@ -50,7 +50,7 @@ void main() {
         rangeMin: 1,
         rangeMax: 5,
         operator: operator,
-        quizModifier: quizModifier,
+        sessionSettings: sessionSettings,
         operandsHistory: [],
       );
       for (int i = 0; i < sampleSize; i++) {
@@ -66,7 +66,7 @@ void main() {
         rangeMin: 1,
         rangeMax: 5,
         operator: operator,
-        quizModifier: quizModifier,
+        sessionSettings: sessionSettings,
         operandsHistory: [],
       );
       for (int i = 0; i < sampleSize; i++) {
@@ -78,7 +78,7 @@ void main() {
   });
 
   group("Group C: Default Multiplication", () {
-      QuizModifier quizModifier = QuizModifier();
+      SessionSettings sessionSettings = SessionSettings();
 
       test("C1: No zero in multiplication operands", () {
         const Operator operator = Operator.multiplication;
@@ -86,7 +86,7 @@ void main() {
           rangeMin: 1,
           rangeMax: 5,
           operator: operator,
-          quizModifier: quizModifier,
+          sessionSettings: sessionSettings,
           operandsHistory: [],
         );
         for (int i = 0; i < sampleSize; i++) {
@@ -102,7 +102,7 @@ void main() {
           rangeMin: 1,
           rangeMax: 5,
           operator: operator,
-          quizModifier: quizModifier,
+          sessionSettings: sessionSettings,
           operandsHistory: [],
         );
         for (int i = 0; i < sampleSize; i++) {
@@ -114,7 +114,7 @@ void main() {
     });
 
     group("Group D: Default Division", () {
-      QuizModifier quizModifier = QuizModifier();
+      SessionSettings sessionSettings = SessionSettings();
 
       test("D1: No duplicated division operands", () {
         const Operator operator = Operator.division;
@@ -122,7 +122,7 @@ void main() {
           rangeMin: 1,
           rangeMax: 5,
           operator: operator,
-          quizModifier: quizModifier,
+          sessionSettings: sessionSettings,
           operandsHistory: [],
         );
         for (int i = 0; i < sampleSize; i++) {
@@ -137,7 +137,7 @@ void main() {
           rangeMin: 1,
           rangeMax: 5,
           operator: operator,
-          quizModifier: quizModifier,
+          sessionSettings: sessionSettings,
           operandsHistory: [],
         );
         for (int i = 0; i < sampleSize; i++) {
@@ -153,7 +153,7 @@ void main() {
           rangeMin: 1,
           rangeMax: 5,
           operator: operator,
-          quizModifier: quizModifier,
+          sessionSettings: sessionSettings,
           operandsHistory: [],
         );
         for (int i = 0; i < sampleSize; i++) {

@@ -12,6 +12,7 @@ class MathMedButton extends ConsumerWidget {
   final double textSize;
   final FontWeight fontWeight;
   final Size buttonSize;
+  final Color? backgroundColor;
 
   const MathMedButton({
     super.key,
@@ -23,6 +24,7 @@ class MathMedButton extends ConsumerWidget {
     this.textFontFamily = "IBM Plex Sans Thai",
     this.fontWeight = const FontWeight(100),
     this.buttonSize = const Size(150,50),
+    this.backgroundColor,
   });
 
   @override
@@ -32,9 +34,9 @@ class MathMedButton extends ConsumerWidget {
     if (primaryButton) {
       colour = Theme.of(context).colorScheme.primary;
     } else if (colourFollowsOperator) {
-      colour = ref.read(appStateDataProvider).selectedOperator.colour;
+      colour = ref.read(appStateDataProvider).currentSessionSettings.selectedOperator.colour;
     } else {
-      colour = Theme.of(context).colorScheme.surface;
+      colour = backgroundColor ?? Theme.of(context).colorScheme.surface;
     }
 
     return ElevatedButton(

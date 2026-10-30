@@ -2,18 +2,18 @@ import 'dart:math';
 
 import 'package:math_med/core/enums/operator.dart';
 import 'package:math_med/core/numbers/number_randomiser.dart';
-import 'package:math_med/core/quizzes/quiz_modifier.dart';
+import 'package:math_med/core/sessions/session_settings.dart';
 
 class Quiz {
   final int operandA, operandB;
   final Operator operator;
   final List<int> choices;
-  final QuizModifier quizModifier;
+  final SessionSettings sessionSettings;
   final int maxChoiceAmount;
 
   /// [Quiz] is one of the most important element in MathMed, which provide a question to the [Session].
   /// 
-  /// Provide [operandA], [operandB], [Operator], [QuizModifier] and [maxChoiceAmount] to generate a quiz.
+  /// Provide [operandA], [operandB], [Operator], [SessionSettings] and [maxChoiceAmount] to generate a quiz.
   /// Although, you should use [generateQuiz] function more, which is optimised for [Session] usage.
   /// This constructor can be use if you have certain operands and operator.
   /// 
@@ -23,32 +23,32 @@ class Quiz {
     required this.operandA,
     required this.operandB,
     required this.operator,
-    required this.quizModifier,
+    required this.sessionSettings,
     required this.maxChoiceAmount,
     Random? random, // this can be set as seed
   }) : choices = generateChoices(
          calculateAnswer(operandA, operandB, operator),
          maxChoiceAmount,
          operator,
-         quizModifier,
+         sessionSettings,
          random ?? Random(),
        );
 
-  /// Create a new random [Quiz] using [Operator], [QuizModifier], [operandsHistory] and [maxChoiceAmount]
+  /// Create a new random [Quiz] using [Operator], [SessionSettings], [operandsHistory] and [maxChoiceAmount]
   /// 
   /// #### Warning
-  /// If the provided [QuizModifier] is too strict, it might result in [StateError] which result null and
+  /// If the provided [SessionSettings] is too strict, it might result in [StateError] which result null and
   /// cause the [Session] to be destroyed.
 
-  static Quiz? generateQuiz(Operator operator, QuizModifier quizModifier, List<(int, int)> operandsHistory, int maxChoiceAmount) {
+  static Quiz? generateQuiz(Operator operator, SessionSettings sessionSettings, List<(int, int)> operandsHistory, int maxChoiceAmount) {
     final (int, int) operands;
 
     try {
       operands = NumberRandomiser(
-      rangeMin: 1, // hardcoded
+      rangeMin: 0, // hardcoded
       rangeMax: 5, // hardcoded
       operator: operator,
-      quizModifier: quizModifier,
+      sessionSettings: sessionSettings,
       operandsHistory: operandsHistory,
       ).operands;
     } on StateError {
@@ -59,7 +59,7 @@ class Quiz {
       operandA: operands.$1,
       operandB: operands.$2,
       operator: operator,
-      quizModifier: quizModifier,
+      sessionSettings: sessionSettings,
       maxChoiceAmount: maxChoiceAmount,
     );
   }
@@ -116,7 +116,7 @@ class Quiz {
     int answer,
     int maxChoiceAmount,
     Operator operator,
-    QuizModifier quizModifier,
+    SessionSettings sessionSettings,
     Random? random,
   ) {
     final rand = random ?? Random();
@@ -145,7 +145,7 @@ class Quiz {
       choices.add(fakeAnswer);
     }
 
-    return quizModifier.shuffleChoices ? (choices.toList()..shuffle()) : (choices.toList()..sort());
+    return sessionSettings.shuffleChoices ? (choices.toList()..shuffle()) : (choices.toList()..sort());
   }
 
   // User answer

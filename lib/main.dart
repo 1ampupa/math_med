@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:math_med/gui/pages/lobby_settings_page.dart';
 
 import 'package:window_manager/window_manager.dart';
 
@@ -71,8 +72,9 @@ class MathMedApp extends ConsumerWidget {
       ),
 
       home: switch (appState) {
-        AppState.inTitle => TitlePage(), // we dont have it yet :sob:
-        AppState.inLobby => LobbyPage(), // same
+        AppState.inTitle => TitlePage(),
+        AppState.inLobby => LobbyPage(),
+        AppState.inLobbyCustomisation => SessionSettingsPage(),
         AppState.inGame => GamePage(),
       }
     );

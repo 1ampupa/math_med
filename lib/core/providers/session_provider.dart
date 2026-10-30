@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:math_med/core/enums/operator.dart';
 import 'package:math_med/core/quizzes/quiz.dart';
-import 'package:math_med/core/quizzes/quiz_modifier.dart';
+import 'package:math_med/core/sessions/session_settings.dart';
 import 'package:math_med/core/sessions/session.dart';
 
 class SessionNotifier extends Notifier<Session?> {
@@ -14,16 +14,16 @@ class SessionNotifier extends Notifier<Session?> {
   @override
   Session? build() => null;
 
-  /// Create new [Session], which you may provide custom [Operator], [QuizModifier],
+  /// Create new [Session], which you may provide custom [Operator], [SessionSettings],
   /// [maxQuiz] and [maxChoice]
   
   Session _createSession({
     required Operator operator,
-    required QuizModifier quizModifier,
+    required SessionSettings sessionSettings,
     required int maxQuiz,
     required int maxChoice,
   }) {
-    final Quiz? quiz = Quiz.generateQuiz(operator, quizModifier, [], maxChoice);
+    final Quiz? quiz = Quiz.generateQuiz(operator, sessionSettings, [], maxChoice);
 
     if (quiz == null) {
       throw StateError("Failed to generate initial quiz");
@@ -31,7 +31,7 @@ class SessionNotifier extends Notifier<Session?> {
 
     return Session(
       operator: operator,
-      quizModifier: quizModifier,
+      sessionSettings: sessionSettings,
       maxQuiz: maxQuiz,
       maxChoice: maxChoice,
       quizCreated: 1,
@@ -42,10 +42,10 @@ class SessionNotifier extends Notifier<Session?> {
 
   /// Start the new [Session]
 
-  void start(Operator operator, QuizModifier quizModifier, int maxQuiz, int maxChoice) {
+  void start(Operator operator, SessionSettings sessionSettings, int maxQuiz, int maxChoice) {
     state = _createSession(
       operator: operator,
-      quizModifier: quizModifier,
+      sessionSettings: sessionSettings,
       maxQuiz: maxQuiz,
       maxChoice: maxChoice,
     );
@@ -57,7 +57,7 @@ class SessionNotifier extends Notifier<Session?> {
     final currentSession = state;
     if (currentSession == null) throw StateError;
 
-    start(currentSession.operator, currentSession.quizModifier, currentSession.maxQuiz, currentSession.maxChoice);
+    start(currentSession.operator, currentSession.sessionSettings, currentSession.maxQuiz, currentSession.maxChoice);
     log("Session restarted", level: 0, name: "SessionProvider");
   }
 
@@ -94,7 +94,7 @@ class SessionNotifier extends Notifier<Session?> {
 
     final Quiz? newQuiz = Quiz.generateQuiz(
       updatedSession.operator,
-      updatedSession.quizModifier,
+      updatedSession.sessionSettings,
       updatedSession.operandsHistory,
       updatedSession.maxChoice
     );

@@ -1,35 +1,27 @@
 import 'package:math_med/core/enums/app_state.dart';
-import 'package:math_med/core/enums/operator.dart';
+import 'package:math_med/core/sessions/session_settings.dart';
 
 class AppStateData {
   final AppState appState;
   final String errorMessage;
-  final Operator selectedOperator;
-  final int maxQuiz;
-  final int maxChoice;
+  final SessionSettings currentSessionSettings;
 
-  const AppStateData({
+
+  AppStateData({
     this.appState = AppState.inTitle,
     this.errorMessage = "",
-    this.selectedOperator = Operator.addition,
-    this.maxQuiz = 10,
-    this.maxChoice = 3,
-  });
+    SessionSettings? currentSessionSettings,
+  }) : currentSessionSettings = currentSessionSettings ?? SessionSettings();
 
   AppStateData copyWith({
     AppState? appState,
     String? errorMessage,
-    Operator? selectedOperator,
-    int? maxQuiz,
-    int? maxChoice,
-    int? animatedTitleCounter,
+    SessionSettings? currentSessionSettings,
   }) {
     return AppStateData(
       appState: appState ?? this.appState,
       errorMessage: errorMessage ?? this.errorMessage,
-      selectedOperator: selectedOperator ?? this.selectedOperator,
-      maxQuiz: maxQuiz ?? this.maxQuiz,
-      maxChoice: maxChoice ?? this.maxChoice,
+      currentSessionSettings: currentSessionSettings ?? this.currentSessionSettings,
     );
   }
 }

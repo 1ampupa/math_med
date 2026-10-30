@@ -37,7 +37,7 @@ class AnswerChoice extends ConsumerWidget {
                 "${session.currentQuiz!.choices[i]}",
                 style: TextStyle(
                   fontSize: 50,
-                  color: ref.read(appStateDataProvider).selectedOperator.colour
+                  color: ref.read(appStateDataProvider).currentSessionSettings.selectedOperator.colour
                 ),
               ),
             ),

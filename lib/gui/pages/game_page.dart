@@ -17,6 +17,7 @@ class GamePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Session? session = ref.watch(sessionProvider);
+    final Color operatorColour = ref.read(appStateDataProvider).currentSessionSettings.selectedOperator.colour;
 
     if (session == null) return ErrorPage(errorText: "Session not found.");
 
@@ -56,7 +57,7 @@ class GamePage extends ConsumerWidget {
                     session.operator.name.toUpperCase(),
                     style: TextStyle(
                       fontSize: 16,
-                      color: ref.read(appStateDataProvider).selectedOperator.colour
+                      color: operatorColour,
                     ),
                   ),
                   Expanded(
@@ -64,7 +65,7 @@ class GamePage extends ConsumerWidget {
                       value: ((session.quizAnswered + session.quizSkipped) / session.maxQuiz),
                       minHeight: 8,
                       borderRadius: BorderRadius.circular(100),
-                      color: ref.read(appStateDataProvider).selectedOperator.colour,
+                      color: operatorColour,
                       backgroundColor: Colors.grey.shade800,
                     ),
                   ),
@@ -72,7 +73,7 @@ class GamePage extends ConsumerWidget {
                     "${session.quizCreated}/${session.maxQuiz}",
                     style: TextStyle(
                       fontSize: 16,
-                      color: ref.read(appStateDataProvider).selectedOperator.colour
+                      color: operatorColour,
                     ),
                   ),
                 ],
@@ -86,18 +87,18 @@ class GamePage extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 30,
                       fontFamily: "Anton",
-                      color: ref.read(appStateDataProvider).selectedOperator.colour
+                      color: operatorColour,
                     ),
                   ),
                   Text(
                     session.currentQuiz!.equation,
                     style: TextStyle(
                       fontSize: 60,
-                      color: ref.read(appStateDataProvider).selectedOperator.colour
+                      color: operatorColour,
                     ),
                   ),
                   Divider(
-                    color: ref.read(appStateDataProvider).selectedOperator.colour
+                    color: operatorColour,
                   ),
                   AnswerChoice(),
                 ],

@@ -8,7 +8,7 @@ import 'package:math_med/core/enums/app_state.dart';
 import 'package:math_med/core/enums/operator.dart';
 import 'package:math_med/core/providers/app_state_data_provider.dart';
 import 'package:math_med/core/providers/session_provider.dart';
-import 'package:math_med/core/quizzes/quiz_modifier.dart';
+import 'package:math_med/core/sessions/session_settings.dart';
 
 import 'package:math_med/gui/widgets/math_med_button.dart';
 
@@ -26,7 +26,7 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
   void initState() {
     super.initState();
     maxQuizController = TextEditingController(
-      text: ref.watch(appStateDataProvider).maxQuiz.toString(),
+      text: ref.watch(appStateDataProvider).currentSessionSettings.maxQuiz.toString(),
     );
   }
 
@@ -38,9 +38,9 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
 
   @override
   Widget build(BuildContext context) {
-    Operator selectedOperator = ref
+    SessionSettings currentSessionSettings = ref
         .watch(appStateDataProvider)
-        .selectedOperator;
+        .currentSessionSettings;
 
     return Scaffold(
       body: SafeArea(
@@ -80,7 +80,7 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                         child: Container(
                           height: 85,
                           decoration: BoxDecoration(
-                            color: selectedOperator.colour,
+                            color: currentSessionSettings.selectedOperator.colour,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Padding(
@@ -97,7 +97,7 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                                   ),
                                 ),
                                 Text(
-                                  selectedOperator.name.toUpperCase(),
+                                  currentSessionSettings.selectedOperator.name.toUpperCase(),
                                   style: TextStyle(
                                     fontFamily: "Anton",
                                     fontSize: 60,
@@ -108,28 +108,35 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                                   text: "Change",
                                   textSize: 18,
                                   function: () {
-                                    switch (selectedOperator) {
+                                    final settings = ref.read(appStateDataProvider).currentSessionSettings;
+                                    switch (currentSessionSettings.selectedOperator) {
                                       case Operator.addition:
-                                        ref
-                                            .read(appStateDataProvider.notifier)
-                                            .setOperator(Operator.subtraction);
+                                        ref.read(appStateDataProvider.notifier).updateSessionSettings(
+                                          settings.copyWith(
+                                            selectedOperator: Operator.subtraction,
+                                          )
+                                        );
                                         break;
                                       case Operator.subtraction:
-                                        ref
-                                            .read(appStateDataProvider.notifier)
-                                            .setOperator(
-                                              Operator.multiplication,
-                                            );
+                                        ref.read(appStateDataProvider.notifier).updateSessionSettings(
+                                          settings.copyWith(
+                                            selectedOperator: Operator.multiplication,
+                                          )
+                                        );
                                         break;
                                       case Operator.multiplication:
-                                        ref
-                                            .read(appStateDataProvider.notifier)
-                                            .setOperator(Operator.division);
+                                        ref.read(appStateDataProvider.notifier).updateSessionSettings(
+                                          settings.copyWith(
+                                            selectedOperator: Operator.division,
+                                          )
+                                        );
                                         break;
                                       case Operator.division:
-                                        ref
-                                            .read(appStateDataProvider.notifier)
-                                            .setOperator(Operator.addition);
+                                        ref.read(appStateDataProvider.notifier).updateSessionSettings(
+                                          settings.copyWith(
+                                            selectedOperator: Operator.addition,
+                                          )
+                                        );
                                         break;
                                     }
                                   },
@@ -148,13 +155,15 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
-                              color: selectedOperator.colour.withAlpha(150),
+                              color: currentSessionSettings.selectedOperator.colour.withAlpha(150),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   spacing: 5,
                                   children: [
                                     Text(
@@ -171,14 +180,12 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                                         Expanded(
                                           child: TextField(
                                             onChanged: (value) {
-                                              ref
-                                                  .read(
-                                                    appStateDataProvider
-                                                        .notifier,
-                                                  )
-                                                  .setMaxQuiz(
-                                                    int.tryParse(value) ?? 10,
-                                                  );
+                                              final settings = ref.read(appStateDataProvider).currentSessionSettings;
+                                              ref.read(appStateDataProvider.notifier).updateSessionSettings(
+                                                settings.copyWith(
+                                                  maxQuiz: int.tryParse(value) ?? 10,
+                                                )
+                                              );
                                             },
                                             keyboardType: TextInputType.number,
                                             inputFormatters: [
@@ -197,6 +204,13 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                                         ),
                                       ],
                                     ),
+                                    MathMedButton(
+                                      text: "Customise",
+                                      buttonSize: Size(150, 30),
+                                      function: () => ref
+                                          .read(appStateDataProvider.notifier)
+                                          .changeState(AppState.inLobbyCustomisation),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -206,7 +220,7 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
-                              color: selectedOperator.colour.withAlpha(150),
+                              color: currentSessionSettings.selectedOperator.colour.withAlpha(150),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
@@ -242,7 +256,7 @@ class _LobbyPageState extends ConsumerState<LobbyPage> {
                     }
                     ref
                         .read(sessionProvider.notifier)
-                        .start(selectedOperator, QuizModifier(), maxQuiz, 3);
+                        .start(currentSessionSettings.selectedOperator, currentSessionSettings, maxQuiz, 3);
                     ref
                         .read(appStateDataProvider.notifier)
                         .changeState(AppState.inGame);

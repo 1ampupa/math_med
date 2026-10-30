@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:math_med/core/enums/operator.dart';
-import 'package:math_med/core/quizzes/quiz_modifier.dart';
+import 'package:math_med/core/quizzes/quiz_control.dart';
+import 'package:math_med/core/sessions/session_settings.dart';
 
 class NumberRandomiser {
   final int maxRandomiserAttempt = 100;
@@ -11,15 +12,15 @@ class NumberRandomiser {
   final int rangeMin, rangeMax;
   final Operator operator;
   late final (int, int) operands;
-  final QuizModifier quizModifier;
+  final SessionSettings sessionSettings;
   final List<(int, int)> operandsHistory;
 
   /// [NumberRandomiser] uses for random two numbers so call [operands].
-  /// 
+  ///
   /// Provide [rangeMin], [rangeMax], [Operator], [QuizModifier] and [operandsHistory]
-  /// 
+  ///
   /// Depends on [Operator] and [QuizModifier], it would have different behaviour.
-  /// 
+  ///
   /// ### Warning
   /// Providing [rangeMin] and [rangeMax] too close to each other might make
   /// the generator exceeds its maximum attempt at 100 and throw [StateError].
@@ -28,7 +29,7 @@ class NumberRandomiser {
     required this.rangeMin,
     required this.rangeMax,
     required this.operator,
-    required this.quizModifier,
+    required this.sessionSettings,
     required this.operandsHistory,
   }) {
     operands = randomOperands();
@@ -84,8 +85,9 @@ class NumberRandomiser {
           isRepeating = true;
           break;
         }
-        if (!quizModifier.masterAllowCommutative &&
-        (operandB, operandA) == operands) {
+        if (!sessionSettings.masterQuizControls[QuizControl
+                .allowCommutative]! &&
+            (operandB, operandA) == operands) {
           isRepeating = true;
           break;
         }
@@ -94,48 +96,76 @@ class NumberRandomiser {
       if (isRepeating) continue;
 
       // Quiz modifiers masters
-      if ((!quizModifier.masterAllowDuplicated && operandA == operandB) ||
-          !quizModifier.masterAllowZero && (operandA == 0 || operandB == 0)) {
-            continue;
+      if ((!sessionSettings.masterQuizControls[QuizControl.allowDuplicated]! &&
+              operandA == operandB) ||
+          !sessionSettings.masterQuizControls[QuizControl.allowZero]! &&
+              (operandA == 0 || operandB == 0)) {
+        continue;
       }
 
       // Quiz modifiers operands
       switch (operator) {
         case Operator.addition:
-          if (!quizModifier.additionAllowDuplicated && operandA == operandB) {
+          if (!sessionSettings.operatorQuizControls[Operator.addition]![QuizControl
+                  .allowDuplicated]! &&
+              operandA == operandB) {
             continue;
-          } else if (!quizModifier.additionAllowZero && (operandA == 0 || operandB == 0)) {
+          } else if (!sessionSettings.operatorQuizControls[Operator.addition]![QuizControl
+                  .allowCommutative]! &&
+              (operandB, operandA) == operands) {
             continue;
-          } else if (!quizModifier.additionAllowCommutative && (operandB, operandA) == operands) {
+          } else if (!sessionSettings.operatorQuizControls[Operator.addition]![QuizControl
+                  .allowZero]! &&
+              (operandA == 0 || operandB == 0)) {
             continue;
           }
           break;
         case Operator.subtraction:
-          if (!quizModifier.subtractionAllowDuplicated && operandA == operandB) {
+          if (!sessionSettings.operatorQuizControls[Operator.subtraction]![QuizControl
+                  .allowDuplicated]! &&
+              operandA == operandB) {
             continue;
-          } else if (!quizModifier.subtractionAllowZero && (operandA == 0 || operandB == 0)) {
+          } else if (!sessionSettings.operatorQuizControls[Operator.subtraction]![QuizControl
+                  .allowZero]! &&
+              (operandA == 0 || operandB == 0)) {
             continue;
-          } else if (!quizModifier.subtractionAllowNegative && (operandA < 0 || operandB < 0)) {
+          } else if (!sessionSettings.operatorQuizControls[Operator.subtraction]![QuizControl
+                  .allowNegativeAnswer]! &&
+              (operandA < 0 || operandB < 0)) {
             continue;
           }
           break;
         case Operator.multiplication:
-          if (!quizModifier.multiplicationAllowDuplicated && operandA == operandB) {
+          if (!sessionSettings.operatorQuizControls[Operator.multiplication]![QuizControl
+                  .allowDuplicated]! &&
+              operandA == operandB) {
             continue;
-          } else if (!quizModifier.multiplicationAllowZero && (operandA == 0 || operandB == 0)) {
+          } else if (!sessionSettings.operatorQuizControls[Operator.multiplication]![QuizControl
+                  .allowCommutative]! &&
+              (operandB, operandA) == operands) {
             continue;
-          } else if (!quizModifier.multiplicationAllowOne && (operandA == 1 || operandB == 1)) {
+          } else if (!sessionSettings.operatorQuizControls[Operator.multiplication]![QuizControl
+                  .allowZero]! &&
+              (operandA == 0 || operandB == 0)) {
             continue;
-          } else if (!quizModifier.multiplicationAllowCommutative && (operandB, operandA) == operands) {
+          } else if (!sessionSettings.operatorQuizControls[Operator.multiplication]![QuizControl
+                  .allowOne]! &&
+              (operandA == 1 || operandB == 1)) {
             continue;
           }
           break;
         case Operator.division:
-          if (!quizModifier.divisionAllowDuplicated && operandA == operandB) {
+          if (!sessionSettings.operatorQuizControls[Operator.division]![QuizControl
+                  .allowDuplicated]! &&
+              operandA == operandB) {
             continue;
-          } else if (!quizModifier.divisionAllowZero && (operandA == 0 || operandB == 0)) {
+          } else if (!sessionSettings.operatorQuizControls[Operator.division]![QuizControl
+                  .allowZero]! &&
+              (operandA == 0 || operandB == 0)) {
             continue;
-          } else if (!quizModifier.divisionAllowOne && (operandA == 1 || operandB == 1)) {
+          } else if (!sessionSettings.operatorQuizControls[Operator.division]![QuizControl
+                  .allowOne]! &&
+              (operandA == 1 || operandB == 1)) {
             continue;
           }
           break;
